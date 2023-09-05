@@ -11,7 +11,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="mb-6 md:mb-20 px-4 md:px-16 lg:px-40 pt-4 md:pt-12 lg:pt-20">
+      <div className="mb-12 md:mb-20 px-4 md:px-16 lg:px-40 pt-4 md:pt-12 lg:pt-20">
         <div className="flex flex-row justify-between items-center">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#152836]">
             Memory

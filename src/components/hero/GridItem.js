@@ -3,7 +3,7 @@ import React from "react";
 const GridItem = ({ rotated, handleRotation, index }) => {
   return (
     <div
-      className={`relative w-24 h-24 rounded-full text-white overflow-hidden cursor-pointer transition-all duration-700 ${
+      className={`relative w-[68px] md:w-28 h-[68px] md:h-28 rounded-full text-white overflow-hidden cursor-pointer transition-all duration-700 ${
         rotated.status ? "[transform:rotateY(180deg)]" : ""
       }`}
       onClick={() => handleRotation(index)}

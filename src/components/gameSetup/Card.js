@@ -1,4 +1,5 @@
 import React from "react";
+import Option from "./Option";
 
 const Card = ({
   setNewGame,
@@ -21,10 +22,7 @@ const Card = ({
     setSelectedGridSize(size);
   };
 
-  const themeOptions = [
-    { label: "Numbers", value: "Numbers" },
-    { label: "Icons", value: "Icons" },
-  ];
+  const themeOptions = ["Numbers", "Icons"];
 
   const playerOptions = [1, 2, 3, 4];
 
@@ -32,26 +30,13 @@ const Card = ({
 
   const renderOptions = (options, selectedValue, onChange) =>
     options.map((option) => (
-      <React.Fragment key={option}>
-        <input
-          className="sr-only"
-          type="radio"
-          name={`mg-${options[0]}-${option}`}
-          id={`mg-${options[0]}-${option}`}
-          checked={selectedValue === option}
-          onChange={() => onChange(option)}
-        />
-        <label
-          className={`basis-full select-none font-bold cursor-pointer text-white rounded-full text-center leading-[2.5] md:leading-[2] ring-transparent ring-0 ring-offset-2 ${
-            selectedValue === option
-              ? "bg-[#152836]"
-              : "bg-[#bacdd9] hover:bg-[#6393b6]"
-          }`}
-          htmlFor={`mg-${options[0]}-${option}`}
-        >
-          {option.label || option}
-        </label>
-      </React.Fragment>
+      <Option
+        key={option}
+        options={options}
+        option={option}
+        selectedValue={selectedValue}
+        onChange={onChange}
+      />
     ));
 
   return (

@@ -6,7 +6,9 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <Grid />
+      <div className="lg:container mx-auto px-4">
+        <Grid />
+      </div>
       <Footer />
     </>
   );

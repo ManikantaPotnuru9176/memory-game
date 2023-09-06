@@ -4,7 +4,7 @@ import Moves from "./Moves";
 
 const GameStatus = () => {
   return (
-    <div className="flex flex-row justify-center gap-4 md:gap-8">
+    <div className="flex flex-row justify-center gap-6">
       <Time />
       <Moves />
     </div>

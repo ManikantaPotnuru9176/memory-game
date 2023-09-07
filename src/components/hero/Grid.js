@@ -21,7 +21,7 @@ const Grid = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center pb-6 md:pb-0">
       <div
         className={`grid ${
           gridSize === 4 ? "grid-cols-4" : "grid-cols-6"

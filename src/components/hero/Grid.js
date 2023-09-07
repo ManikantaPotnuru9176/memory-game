@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import GridItem from "./GridItem";
 
 const Grid = () => {
-  const initialRotationState = Array(16).fill({ value: 1, status: false });
+  const [gridSize, setGridSize] = useState(6);
+  const initialRotationState = Array(gridSize * gridSize).fill({
+    value: 1,
+    status: false,
+  });
   const [isRotated, setIsRotated] = useState(initialRotationState);
 
   const handleRotation = (index) => {
@@ -18,13 +22,18 @@ const Grid = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="grid grid-cols-4 gap-3 md:gap-4">
+      <div
+        className={`grid grid-cols-${gridSize} gap-2 md:gap-${
+          gridSize === 4 ? 4 : 2
+        }`}
+      >
         {isRotated.map((rotated, index) => (
           <GridItem
             key={index}
             rotated={rotated}
             handleRotation={handleRotation}
             index={index}
+            gridSize={gridSize}
           />
         ))}
       </div>

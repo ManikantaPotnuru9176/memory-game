@@ -4,7 +4,7 @@ import Players from "./multiPlayer/Players";
 
 const Footer = () => {
   return (
-    <div className="pt-8 md:pt-12 lg:pt-20 pb-4 md:pb-8">
+    <div className="pt-8 md:pt-12 lg:pt-20">
       {false ? <GameStatus /> : <Players />}
     </div>
   );

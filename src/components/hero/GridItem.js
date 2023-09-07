@@ -1,9 +1,14 @@
 import React from "react";
 
-const GridItem = ({ rotated, handleRotation, index }) => {
+const GridItem = ({ rotated, handleRotation, index, gridSize }) => {
+  const itemSizeClass =
+    gridSize === 6
+      ? "w-[3.2rem] h-[3.2rem] md:w-[4.7rem] md:h-[4.7rem]"
+      : "w-16 h-16 md:w-24 md:h-24";
+
   return (
     <button
-      className={`relative w-16 h-16 md:w-24 md:h-24 rounded-full text-white overflow-hidden cursor-pointer shadow-2xl transition-all duration-300 ${
+      className={`relative ${itemSizeClass} rounded-full text-white overflow-hidden cursor-pointer shadow-2xl transition-all duration-300 ${
         rotated.status ? "[transform:rotateY(180deg)]" : ""
       }`}
       onClick={() => handleRotation(index)}

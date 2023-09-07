@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "./Button";
 
-const Navbar = ({ setNewGame }) => {
+const Navbar = ({ setNewGame, selectedPlayers }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pausePlay, setPausePlay] = useState("Play Game");
 
@@ -28,14 +28,16 @@ const Navbar = ({ setNewGame }) => {
             <div className="hidden md:flex md:gap-2 lg:gap-4">
               <Button text="Restart" primary />
               <Button text="New Game" onClick={() => setNewGame(true)} />
-              <Button
-                text={pausePlay}
-                onClick={() =>
-                  setPausePlay((prev) =>
-                    prev === "Play Game" ? "Pause Game" : "Play Game"
-                  )
-                }
-              />
+              {selectedPlayers === 1 && (
+                <Button
+                  text={pausePlay}
+                  onClick={() =>
+                    setPausePlay((prev) =>
+                      prev === "Play Game" ? "Pause Game" : "Play Game"
+                    )
+                  }
+                />
+              )}
             </div>
           </nav>
         </div>
@@ -60,15 +62,17 @@ const Navbar = ({ setNewGame }) => {
                 setNewGame(true);
               }}
             />
-            <Button
-              text={pausePlay}
-              onClick={() => {
-                toggleMobileMenu();
-                setPausePlay((prev) =>
-                  prev === "Play Game" ? "Pause Game" : "Play Game"
-                );
-              }}
-            />
+            {selectedPlayers === 1 && (
+              <Button
+                text={pausePlay}
+                onClick={() => {
+                  toggleMobileMenu();
+                  setPausePlay((prev) =>
+                    prev === "Play Game" ? "Pause Game" : "Play Game"
+                  );
+                }}
+              />
+            )}
           </div>
         </div>
       )}

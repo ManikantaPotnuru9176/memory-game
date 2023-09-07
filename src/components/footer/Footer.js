@@ -2,10 +2,14 @@ import React from "react";
 import GameStatus from "./singlePlayer/GameStatus";
 import Players from "./multiPlayer/Players";
 
-const Footer = () => {
+const Footer = ({ selectedPlayers }) => {
   return (
     <div className="pt-8 md:pt-12 lg:pt-16">
-      {false ? <GameStatus /> : <Players />}
+      {selectedPlayers === 1 ? (
+        <GameStatus />
+      ) : (
+        <Players selectedPlayers={selectedPlayers} />
+      )}
     </div>
   );
 };

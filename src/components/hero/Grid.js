@@ -1,23 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import GridItem from "./GridItem";
 
-const Grid = () => {
-  const [gridSize, setGridSize] = useState(6);
+const Grid = ({ selectedGridSize }) => {
+  const gridSize = selectedGridSize === "4x4" ? 4 : 6;
+
   const initialRotationState = Array(gridSize * gridSize).fill({
     value: 1,
     status: false,
   });
+
   const [isRotated, setIsRotated] = useState(initialRotationState);
+  const [flippedCount, setFlippedCount] = useState(0);
+
+  useEffect(() => {
+    if (flippedCount === 2) {
+      setTimeout(() => {
+        const newRotationState = isRotated.map((rotated) => ({
+          value: rotated.value,
+          status: false,
+        }));
+        setIsRotated(newRotationState);
+        setFlippedCount(0);
+      }, 600);
+    }
+  }, [flippedCount, isRotated]);
 
   const handleRotation = (index) => {
-    setIsRotated((prevState) => {
-      const newRotationState = [...prevState];
-      newRotationState[index] = {
-        value: newRotationState[index].value,
-        status: !newRotationState[index].status,
-      };
-      return newRotationState;
-    });
+    if (flippedCount < 2 && !isRotated[index].status) {
+      setIsRotated((prevState) => {
+        const newRotationState = [...prevState];
+        newRotationState[index] = {
+          value: newRotationState[index].value,
+          status: !newRotationState[index].status,
+        };
+        return newRotationState;
+      });
+      setFlippedCount((count) => count + 1);
+    }
   };
 
   return (

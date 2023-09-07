@@ -16,11 +16,11 @@ export default function Home() {
     <>
       {!newGame ? (
         <>
-          <Navbar setNewGame={setNewGame} />
+          <Navbar setNewGame={setNewGame} selectedPlayers={selectedPlayers} />
           <div className="lg:container mx-auto px-4">
-            <Grid />
+            <Grid selectedGridSize={selectedGridSize} />
           </div>
-          <Footer />
+          <Footer selectedPlayers={selectedPlayers} />
           {false && <GameEnd setNewGame={setNewGame} />}
         </>
       ) : (

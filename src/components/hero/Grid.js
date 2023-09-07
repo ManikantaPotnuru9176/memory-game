@@ -18,7 +18,7 @@ const Grid = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="grid grid-cols-4 gap-2 md:gap-4 lg:gap-6">
+      <div className="grid grid-cols-4 gap-3 md:gap-4">
         {isRotated.map((rotated, index) => (
           <GridItem
             key={index}

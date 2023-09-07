@@ -11,10 +11,10 @@ const Navbar = ({ setNewGame }) => {
 
   return (
     <>
-      <div className="mb-12 md:mb-20 px-4 md:px-16 lg:px-40 pt-4 md:pt-12 lg:pt-20">
+      <div className="mb-8 px-4 md:px-16 lg:px-12 pt-4 md:pt-6">
         <div className="flex flex-row justify-between items-center">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#152836]">
-            Memory
+            Memory Game
           </h1>
           <nav className="mt-2 md:mt-0">
             <div className="md:hidden">

@@ -2,6 +2,7 @@ import Navbar from "@/components/navbar/Navbar";
 import Grid from "@/components/hero/Grid";
 import Footer from "@/components/footer/Footer";
 import NewGame from "@/components/gameSetup/NewGame";
+import GameEnd from "@/components/gameEnd/GameEnd";
 import { useState } from "react";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
             <Grid />
           </div>
           <Footer />
+          {false && <GameEnd setNewGame={setNewGame} />}
         </>
       ) : (
         <NewGame

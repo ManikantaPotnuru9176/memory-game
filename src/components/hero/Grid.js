@@ -23,9 +23,9 @@ const Grid = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       <div
-        className={`grid grid-cols-${gridSize} gap-2 md:gap-${
-          gridSize === 4 ? 4 : 2
-        }`}
+        className={`grid ${
+          gridSize === 4 ? "grid-cols-4" : "grid-cols-6"
+        } gap-2 md:${gridSize === 4 ? "gap-4" : "gap-2"}`}
       >
         {isRotated.map((rotated, index) => (
           <GridItem

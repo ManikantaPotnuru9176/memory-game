@@ -3,7 +3,7 @@ import React from "react";
 const GridItem = ({ rotated, handleRotation, index, gridSize }) => {
   const itemSizeClass =
     gridSize === 6
-      ? "w-[3.2rem] h-[3.2rem] md:w-[4.7rem] md:h-[4.7rem]"
+      ? "w-[3.2rem] h-[3.2rem] md:w-[4.2rem] md:h-[4.2rem]"
       : "w-16 h-16 md:w-24 md:h-24";
 
   return (

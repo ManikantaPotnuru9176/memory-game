@@ -28,6 +28,11 @@ const Player = ({ index }) => {
         >
           0
         </span>
+        {index === 0 && (
+          <div className="hidden lg:block absolute top-20 text-[#152937] font-bold text-center uppercase text-xxs tracking-[0.3em] mt-2">
+            Current Turn
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Option from "./Option";
 
 const NewGame = ({
@@ -10,6 +10,14 @@ const NewGame = ({
   selectedGridSize,
   setSelectedGridSize,
 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+  }, []);
+
   const handleThemeChange = (theme) => {
     setSelectedTheme(theme);
   };
@@ -40,7 +48,11 @@ const NewGame = ({
     ));
 
   return (
-    <div className="fixed inset-0 bg-[#142838]">
+    <div
+      className={`fixed inset-0 bg-[#142838] transform transition-transform ease-in-out duration-500 ${
+        isVisible ? "translate-x-0" : "-translate-x-full"
+      }`}
+    >
       <div
         className="px-6 mt-20"
         role="dialog"

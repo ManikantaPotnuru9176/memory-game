@@ -1,41 +1,64 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import GridItem from "./GridItem";
 
 const Grid = ({ selectedGridSize }) => {
   const gridSize = selectedGridSize === "4x4" ? 4 : 6;
+  const isInitialRender = useRef(true);
 
-  const initialRotationState = Array(gridSize * gridSize).fill({
-    value: 1,
-    status: false,
-  });
-
-  const [isRotated, setIsRotated] = useState(initialRotationState);
+  const [gridValues, setGridValues] = useState([]);
+  const [flippedValues, setFlippedValues] = useState([]);
   const [flippedCount, setFlippedCount] = useState(0);
 
   useEffect(() => {
-    if (flippedCount === 2) {
-      setTimeout(() => {
-        const newRotationState = isRotated.map((rotated) => ({
-          value: rotated.value,
-          status: false,
-        }));
-        setIsRotated(newRotationState);
-        setFlippedCount(0);
-      }, 600);
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+
+      const pairs = Array.from(
+        { length: (gridSize * gridSize) / 2 },
+        (_, index) => index + 1
+      );
+      const shuffledPairs = [...pairs, ...pairs].sort(
+        () => Math.random() - 0.5
+      );
+
+      const initialRotationState = shuffledPairs.map((value) => ({
+        value,
+        bgColor: "#bbcdd8",
+        status: false,
+      }));
+
+      setGridValues(initialRotationState);
+    } else {
+      if (flippedCount === 2) {
+        setTimeout(() => {
+          const [firstIndex, secondIndex] = flippedValues;
+          const firstValue = gridValues[firstIndex].value;
+          const secondValue = gridValues[secondIndex].value;
+
+          const matched = firstValue === secondValue;
+          const newGridValues = [...gridValues];
+
+          [firstIndex, secondIndex].forEach((index) => {
+            newGridValues[index].status = matched ? true : false;
+            newGridValues[index].bgColor = matched ? "#fca516" : "#bbcdd8";
+          });
+
+          setGridValues(newGridValues);
+          setFlippedCount(0);
+          setFlippedValues([]);
+        }, 600);
+      }
     }
-  }, [flippedCount, isRotated]);
+  }, [flippedCount, flippedValues, gridSize, gridValues]);
 
   const handleRotation = (index) => {
-    if (flippedCount < 2 && !isRotated[index].status) {
-      setIsRotated((prevState) => {
-        const newRotationState = [...prevState];
-        newRotationState[index] = {
-          value: newRotationState[index].value,
-          status: !newRotationState[index].status,
-        };
-        return newRotationState;
-      });
+    if (flippedCount < 2 && !gridValues[index].status) {
+      const newGridValues = [...gridValues];
+      newGridValues[index].status = true;
+
+      setGridValues(newGridValues);
       setFlippedCount((count) => count + 1);
+      setFlippedValues((values) => [...values, index]);
     }
   };
 
@@ -46,7 +69,7 @@ const Grid = ({ selectedGridSize }) => {
           gridSize === 4 ? "grid-cols-4" : "grid-cols-6"
         } gap-2 md:${gridSize === 4 ? "gap-4" : "gap-2"}`}
       >
-        {isRotated.map((rotated, index) => (
+        {gridValues.map((rotated, index) => (
           <GridItem
             key={index}
             rotated={rotated}

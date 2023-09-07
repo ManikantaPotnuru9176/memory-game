@@ -19,7 +19,9 @@ const GridItem = ({ rotated, handleRotation, index, gridSize }) => {
         }`}
       ></div>
       <div
-        className={`absolute inset-0 w-full h-full flex justify-center items-center bg-[#bbcdd8] text-lg md:text-3xl font-extrabold transition-all z-10 ${
+        className={`absolute inset-0 w-full h-full flex justify-center items-center bg-[${
+          rotated.bgColor
+        }] text-2xl md:text-4xl font-extrabold transition-all z-10 ${
           rotated.status ? "[transform:rotateY(180deg)]" : ""
         }`}
       >

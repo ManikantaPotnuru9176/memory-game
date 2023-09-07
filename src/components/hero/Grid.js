@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import GridItem from "./GridItem";
 
-const Grid = ({ selectedGridSize }) => {
+const Grid = ({ selectedGridSize, setIsTimerRunning }) => {
   const gridSize = selectedGridSize === "4x4" ? 4 : 6;
   const isInitialRender = useRef(true);
 
@@ -59,6 +59,7 @@ const Grid = ({ selectedGridSize }) => {
       setGridValues(newGridValues);
       setFlippedCount((count) => count + 1);
       setFlippedValues((values) => [...values, index]);
+      setIsTimerRunning(true);
     }
   };
 

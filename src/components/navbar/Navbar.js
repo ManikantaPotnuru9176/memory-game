@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "./Button";
 
-const Navbar = ({ setNewGame, selectedPlayers }) => {
+const Navbar = ({
+  setNewGame,
+  selectedPlayers,
+  setIsTimerRunning,
+  isTimerRunning,
+}) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pausePlay, setPausePlay] = useState("Play Game");
+
+  useEffect(() => {
+    if (isTimerRunning && pausePlay === "Pause Game") return;
+    if (!isTimerRunning && pausePlay === "Play Game") return;
+    setPausePlay((prev) => (prev === "Play Game" ? "Pause Game" : "Play Game"));
+  }, [isTimerRunning]);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -31,11 +42,12 @@ const Navbar = ({ setNewGame, selectedPlayers }) => {
               {selectedPlayers === 1 && (
                 <Button
                   text={pausePlay}
-                  onClick={() =>
+                  onClick={() => {
+                    setIsTimerRunning(pausePlay === "Play Game" ? true : false);
                     setPausePlay((prev) =>
                       prev === "Play Game" ? "Pause Game" : "Play Game"
-                    )
-                  }
+                    );
+                  }}
                 />
               )}
             </div>
@@ -66,6 +78,7 @@ const Navbar = ({ setNewGame, selectedPlayers }) => {
               <Button
                 text={pausePlay}
                 onClick={() => {
+                  setIsTimerRunning(pausePlay === "Play Game" ? true : false);
                   toggleMobileMenu();
                   setPausePlay((prev) =>
                     prev === "Play Game" ? "Pause Game" : "Play Game"

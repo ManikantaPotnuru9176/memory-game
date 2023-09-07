@@ -11,16 +11,28 @@ export default function Home() {
   const [selectedTheme, setSelectedTheme] = useState("Numbers");
   const [selectedPlayers, setSelectedPlayers] = useState(1);
   const [selectedGridSize, setSelectedGridSize] = useState("4x4");
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   return (
     <>
       {!newGame ? (
         <>
-          <Navbar setNewGame={setNewGame} selectedPlayers={selectedPlayers} />
+          <Navbar
+            setNewGame={setNewGame}
+            selectedPlayers={selectedPlayers}
+            setIsTimerRunning={setIsTimerRunning}
+            isTimerRunning={isTimerRunning}
+          />
           <div className="lg:container mx-auto px-4">
-            <Grid selectedGridSize={selectedGridSize} />
+            <Grid
+              selectedGridSize={selectedGridSize}
+              setIsTimerRunning={setIsTimerRunning}
+            />
           </div>
-          <Footer selectedPlayers={selectedPlayers} />
+          <Footer
+            selectedPlayers={selectedPlayers}
+            isTimerRunning={isTimerRunning}
+          />
           {false && <GameEnd setNewGame={setNewGame} />}
         </>
       ) : (

@@ -2,10 +2,10 @@ import React from "react";
 import Time from "./Time";
 import Moves from "./Moves";
 
-const GameStatus = () => {
+const GameStatus = ({ isTimerRunning }) => {
   return (
     <div className="flex flex-row justify-center gap-6">
-      <Time />
+      <Time isTimerRunning={isTimerRunning} />
       <Moves />
     </div>
   );

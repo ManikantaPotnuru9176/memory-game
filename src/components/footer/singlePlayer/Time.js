@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Time = ({ isTimerRunning }) => {
-  const [time, setTime] = useState(0);
-
+const Time = ({ isTimerRunning, time, setTime }) => {
   useEffect(() => {
     if (!isTimerRunning) return;
     const updateTime = () => {

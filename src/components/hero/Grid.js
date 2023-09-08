@@ -1,33 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import GridItem from "./GridItem";
 
-const Grid = ({ selectedGridSize, setIsTimerRunning, setMoves }) => {
-  const gridSize = selectedGridSize === "4x4" ? 4 : 6;
+const Grid = ({
+  setIsTimerRunning,
+  setMoves,
+  gridValues,
+  setGridValues,
+  flippedValues,
+  setFlippedValues,
+  flippedCount,
+  setFlippedCount,
+  shuffleGridValues,
+  gridSize,
+}) => {
   const isInitialRender = useRef(true);
-
-  const [gridValues, setGridValues] = useState([]);
-  const [flippedValues, setFlippedValues] = useState([]);
-  const [flippedCount, setFlippedCount] = useState(0);
 
   useEffect(() => {
     if (isInitialRender.current) {
       isInitialRender.current = false;
-
-      const pairs = Array.from(
-        { length: (gridSize * gridSize) / 2 },
-        (_, index) => index + 1
-      );
-      const shuffledPairs = [...pairs, ...pairs].sort(
-        () => Math.random() - 0.5
-      );
-
-      const initialRotationState = shuffledPairs.map((value) => ({
-        value,
-        bgColor: "bg-[#bbcdd8]",
-        status: false,
-      }));
-
-      setGridValues(initialRotationState);
+      shuffleGridValues();
     } else {
       if (flippedCount === 2) {
         setTimeout(() => {

@@ -6,6 +6,11 @@ const Navbar = ({
   selectedPlayers,
   setIsTimerRunning,
   isTimerRunning,
+  setMoves,
+  setTime,
+  setFlippedValues,
+  setFlippedCount,
+  shuffleGridValues,
 }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pausePlay, setPausePlay] = useState("Play Game");
@@ -18,6 +23,15 @@ const Navbar = ({
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleRestart = () => {
+    shuffleGridValues();
+    setMoves(0);
+    setTime(0);
+    setFlippedCount(0);
+    setIsTimerRunning(false);
+    setFlippedValues([]);
   };
 
   return (
@@ -37,7 +51,7 @@ const Navbar = ({
               </button>
             </div>
             <div className="hidden md:flex md:gap-2 lg:gap-4">
-              <Button text="Restart" primary />
+              <Button text="Restart" primary onClick={() => handleRestart()} />
               <Button text="New Game" onClick={() => setNewGame(true)} />
               {selectedPlayers === 1 && (
                 <Button

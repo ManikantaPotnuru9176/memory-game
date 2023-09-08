@@ -12,6 +12,7 @@ export default function Home() {
   const [selectedPlayers, setSelectedPlayers] = useState(1);
   const [selectedGridSize, setSelectedGridSize] = useState("4x4");
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [moves, setMoves] = useState(0);
 
   return (
     <>
@@ -27,11 +28,13 @@ export default function Home() {
             <Grid
               selectedGridSize={selectedGridSize}
               setIsTimerRunning={setIsTimerRunning}
+              setMoves={setMoves}
             />
           </div>
           <Footer
             selectedPlayers={selectedPlayers}
             isTimerRunning={isTimerRunning}
+            moves={moves}
           />
           {false && <GameEnd setNewGame={setNewGame} />}
         </>

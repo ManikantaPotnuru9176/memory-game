@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import GridItem from "./GridItem";
 
-const Grid = ({ selectedGridSize, setIsTimerRunning }) => {
+const Grid = ({ selectedGridSize, setIsTimerRunning, setMoves }) => {
   const gridSize = selectedGridSize === "4x4" ? 4 : 6;
   const isInitialRender = useRef(true);
 
@@ -23,7 +23,7 @@ const Grid = ({ selectedGridSize, setIsTimerRunning }) => {
 
       const initialRotationState = shuffledPairs.map((value) => ({
         value,
-        bgColor: "#bbcdd8",
+        bgColor: "bg-[#bbcdd8]",
         status: false,
       }));
 
@@ -40,9 +40,12 @@ const Grid = ({ selectedGridSize, setIsTimerRunning }) => {
 
           [firstIndex, secondIndex].forEach((index) => {
             newGridValues[index].status = matched ? true : false;
-            newGridValues[index].bgColor = matched ? "#fca516" : "#bbcdd8";
+            newGridValues[index].bgColor = matched
+              ? "bg-[#fca516]"
+              : "bg-[#bbcdd8]";
           });
 
+          setMoves((prev) => prev + 1);
           setGridValues(newGridValues);
           setFlippedCount(0);
           setFlippedValues([]);

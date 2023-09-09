@@ -12,6 +12,10 @@ const Grid = ({
   setFlippedCount,
   shuffleGridValues,
   gridSize,
+  currPlayer,
+  setCurrPlayer,
+  selectedPlayers,
+  setPlayers,
 }) => {
   const isInitialRender = useRef(true);
 
@@ -35,8 +39,21 @@ const Grid = ({
               ? "bg-[#fca516]"
               : "bg-[#bbcdd8]";
           });
-
-          setMoves((prev) => prev + 1);
+          if (matched) {
+            setPlayers((prev) =>
+              prev.map((player) =>
+                player.id === currPlayer
+                  ? { ...player, score: player.score + 1 }
+                  : player
+              )
+            );
+          }
+          if (selectedPlayers === 1) setMoves((prev) => prev + 1);
+          else
+            setCurrPlayer((prev) => {
+              if (prev === selectedPlayers) prev = 0;
+              return prev + 1;
+            });
           setGridValues(newGridValues);
           setFlippedCount(0);
           setFlippedValues([]);

@@ -9,7 +9,7 @@ const Main = () => {
   const [newGame, setNewGame] = useState(false);
 
   const [selectedTheme, setSelectedTheme] = useState("Numbers");
-  const [selectedPlayers, setSelectedPlayers] = useState(1);
+  const [selectedPlayers, setSelectedPlayers] = useState(4);
   const [selectedGridSize, setSelectedGridSize] = useState("4x4");
 
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -22,8 +22,15 @@ const Main = () => {
   const [flippedCount, setFlippedCount] = useState(0);
   const [gridSize, setGridSize] = useState(4);
 
+  const [currPlayer, setCurrPlayer] = useState(1);
+  const [players, setPlayers] = useState(
+    Array.from({ length: selectedPlayers }, (_, index) => ({
+      id: index + 1,
+      score: 0,
+    }))
+  );
+
   useEffect(() => {
-    console.log("first");
     setGridSize(selectedGridSize === "4x4" ? 4 : 6);
   }, [selectedGridSize]);
 
@@ -71,14 +78,19 @@ const Main = () => {
               flippedCount={flippedCount}
               setFlippedCount={setFlippedCount}
               shuffleGridValues={shuffleGridValues}
+              currPlayer={currPlayer}
+              setCurrPlayer={setCurrPlayer}
+              selectedPlayers={selectedPlayers}
+              setPlayers={setPlayers}
             />
           </div>
           <Footer
-            selectedPlayers={selectedPlayers}
             isTimerRunning={isTimerRunning}
             moves={moves}
             time={time}
             setTime={setTime}
+            currPlayer={currPlayer}
+            players={players}
           />
           {false && <GameEnd setNewGame={setNewGame} />}
         </>

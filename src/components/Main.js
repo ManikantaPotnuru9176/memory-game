@@ -9,7 +9,7 @@ const Main = () => {
   const [newGame, setNewGame] = useState(false);
 
   const [selectedTheme, setSelectedTheme] = useState("Numbers");
-  const [selectedPlayers, setSelectedPlayers] = useState(4);
+  const [selectedPlayers, setSelectedPlayers] = useState(1);
   const [selectedGridSize, setSelectedGridSize] = useState("4x4");
 
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -106,7 +106,7 @@ const Main = () => {
             currPlayer={currPlayer}
             players={players}
           />
-          {true && (
+          {totalScore * 2 === gridSize * gridSize && (
             <GameEnd
               setNewGame={setNewGame}
               selectedPlayers={selectedPlayers}

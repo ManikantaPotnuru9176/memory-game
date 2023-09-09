@@ -14,6 +14,7 @@ const GameEnd = ({
   setFlippedCount,
   setFlippedValues,
   setTotalScore,
+  setPlayers,
 }) => {
   players.sort((a, b) => b.score - a.score);
   const maxScore = Math.max(...players.map((player) => player.score));
@@ -44,11 +45,14 @@ const GameEnd = ({
           ],
         }
       : {
-          title: `Player ${players[0].id} Wins!`,
+          title:
+            players.filter((player) => player.score === maxScore).length === 1
+              ? `Player ${players[0].id} Wins!`
+              : "It's a tie!",
           subtitle: "Game over! Here are the results...",
           data: players.map((player) => ({
             win: player.score === maxScore,
-            title: "Player 1",
+            title: `Player ${player.id}`,
             result: player.score,
             bgColor: player.score === maxScore ? "#142936" : "#dee6ec",
             titleColor: player.score === maxScore ? "#ffffff" : "#819cae",
@@ -65,6 +69,7 @@ const GameEnd = ({
     setIsTimerRunning(false);
     setFlippedValues([]);
     setTotalScore(0);
+    setPlayers((prev) => prev.map((player) => ({ ...player, score: 0 })));
   };
 
   return (

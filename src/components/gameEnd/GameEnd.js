@@ -38,7 +38,7 @@ const GameEnd = ({
           ],
         }
       : {
-          title: {`Player ${players[0].id} Wins!`},
+          title: `Player ${players[0].id} Wins!`,
           subtitle: "Game over! Here are the results...",
           data: players.map((player) => ({
             win: player.score === maxScore,

@@ -46,13 +46,18 @@ const Card = ({ details, setNewGame, handleRestart }) => {
           ))}
         </dl>
         <div className="flex flex-col md:flex-row gap-4 md:gap-[0.875rem] md:pt-4 text-4.125 md:text-5">
-          <button className="basis-full text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#fca516] hover:bg-[#fcba4f] text-white" 
-          onClick={() => handleRestart()}>
+          <button
+            className="basis-full text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#fca516] hover:bg-[#fcba4f] text-white"
+            onClick={() => handleRestart()}
+          >
             Restart
           </button>
           <button
             className="basis-full text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#dfe7ec] hover:bg-[#6393b6] text-[#32485a] hover:text-white"
-            onClick={() => setNewGame(true)}
+            onClick={() => {
+              handleRestart();
+              setNewGame(true);
+            }}
           >
             Setup New Game
           </button>

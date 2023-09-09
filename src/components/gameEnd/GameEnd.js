@@ -8,6 +8,12 @@ const GameEnd = ({
   moves,
   players,
   setIsTimerRunning,
+  shuffleGridValues,
+  setMoves,
+  setTime,
+  setFlippedCount,
+  setFlippedValues,
+  setTotalScore,
 }) => {
   players.sort((a, b) => b.score - a.score);
   const maxScore = Math.max(...players.map((player) => player.score));
@@ -58,23 +64,16 @@ const GameEnd = ({
     setFlippedCount(0);
     setIsTimerRunning(false);
     setFlippedValues([]);
+    setTotalScore(0);
   };
 
   return (
     <div>
-      {false ? (
-        <Card
-          details={playersDetails}
-          setNewGame={setNewGame}
-          handleRestart={handleRestart}
-        />
-      ) : (
-        <Card
-          details={playersDetails}
-          setNewGame={setNewGame}
-          handleRestart={handleRestart}
-        />
-      )}
+      <Card
+        details={playersDetails}
+        setNewGame={setNewGame}
+        handleRestart={handleRestart}
+      />
     </div>
   );
 };

@@ -75,6 +75,7 @@ const Main = () => {
             setFlippedValues={setFlippedValues}
             setFlippedCount={setFlippedCount}
             shuffleGridValues={shuffleGridValues}
+            setPlayers={setPlayers}
           />
           <div className="lg:container mx-auto px-4">
             <Grid
@@ -105,9 +106,6 @@ const Main = () => {
             currPlayer={currPlayer}
             players={players}
           />
-          {console.log("totalScore * 2: ", totalScore * 2)}
-          {console.log("gridSize * gridSize: ", gridSize * gridSize)}
-          {console.log("Time: ", time)}
           {totalScore * 2 === gridSize * gridSize && (
             <GameEnd
               setNewGame={setNewGame}
@@ -116,6 +114,12 @@ const Main = () => {
               moves={moves}
               players={players}
               setIsTimerRunning={setIsTimerRunning}
+              shuffleGridValues={shuffleGridValues}
+              setTime={setTime}
+              setMoves={setMoves}
+              setFlippedCount={setFlippedCount}
+              setFlippedValues={setFlippedValues}
+              setTotalScore={setTotalScore}
             />
           )}
         </>

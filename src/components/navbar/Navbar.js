@@ -11,6 +11,7 @@ const Navbar = ({
   setFlippedValues,
   setFlippedCount,
   shuffleGridValues,
+  setPlayers,
 }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pausePlay, setPausePlay] = useState("Play Game");
@@ -32,6 +33,7 @@ const Navbar = ({
     setFlippedCount(0);
     setIsTimerRunning(false);
     setFlippedValues([]);
+    setPlayers((prev) => prev.map((player) => ({ ...player, score: 0 })));
   };
 
   return (

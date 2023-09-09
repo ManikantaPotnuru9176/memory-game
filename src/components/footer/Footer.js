@@ -21,10 +21,7 @@ const Footer = ({
           setTime={setTime}
         />
       ) : (
-        <Players
-          currPlayer={currPlayer}
-          players={players}
-        />
+        <Players currPlayer={currPlayer} players={players} />
       )}
     </div>
   );

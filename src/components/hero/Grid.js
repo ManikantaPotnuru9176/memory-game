@@ -16,6 +16,7 @@ const Grid = ({
   setCurrPlayer,
   selectedPlayers,
   setPlayers,
+  setTotalScore,
 }) => {
   const isInitialRender = useRef(true);
 
@@ -39,7 +40,9 @@ const Grid = ({
               ? "bg-[#fca516]"
               : "bg-[#bbcdd8]";
           });
+
           if (matched) {
+            setTotalScore((prev) => prev + 1);
             setPlayers((prev) =>
               prev.map((player) =>
                 player.id === currPlayer

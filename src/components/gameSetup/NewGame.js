@@ -9,6 +9,8 @@ const NewGame = ({
   setSelectedPlayers,
   selectedGridSize,
   setSelectedGridSize,
+  setMoves,
+  setTime,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -103,6 +105,8 @@ const NewGame = ({
                 onClick={(e) => {
                   e.preventDefault();
                   setNewGame(false);
+                  setMoves(0);
+                  setTime(0);
                 }}
               >
                 Start Game

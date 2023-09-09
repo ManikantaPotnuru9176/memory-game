@@ -9,7 +9,7 @@ const Main = () => {
   const [newGame, setNewGame] = useState(false);
 
   const [selectedTheme, setSelectedTheme] = useState("Numbers");
-  const [selectedPlayers, setSelectedPlayers] = useState(4);
+  const [selectedPlayers, setSelectedPlayers] = useState(1);
   const [selectedGridSize, setSelectedGridSize] = useState("4x4");
 
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -30,9 +30,20 @@ const Main = () => {
     }))
   );
 
+  const [totalScore, setTotalScore] = useState(0);
+
   useEffect(() => {
     setGridSize(selectedGridSize === "4x4" ? 4 : 6);
   }, [selectedGridSize]);
+
+  useEffect(() => {
+    setPlayers(
+      Array.from({ length: selectedPlayers }, (_, index) => ({
+        id: index + 1,
+        score: 0,
+      }))
+    );
+  }, [selectedPlayers]);
 
   const shuffleGridValues = () => {
     const pairs = Array.from(
@@ -82,17 +93,31 @@ const Main = () => {
               setCurrPlayer={setCurrPlayer}
               selectedPlayers={selectedPlayers}
               setPlayers={setPlayers}
+              setTotalScore={setTotalScore}
             />
           </div>
           <Footer
             isTimerRunning={isTimerRunning}
+            selectedPlayers={selectedPlayers}
             moves={moves}
             time={time}
             setTime={setTime}
             currPlayer={currPlayer}
             players={players}
           />
-          {false && <GameEnd setNewGame={setNewGame} />}
+          {console.log("totalScore * 2: ", totalScore * 2)}
+          {console.log("gridSize * gridSize: ", gridSize * gridSize)}
+          {console.log("Time: ", time)}
+          {totalScore * 2 === gridSize * gridSize && (
+            <GameEnd
+              setNewGame={setNewGame}
+              selectedPlayers={selectedPlayers}
+              time={time}
+              moves={moves}
+              players={players}
+              setIsTimerRunning={setIsTimerRunning}
+            />
+          )}
         </>
       ) : (
         <NewGame
@@ -103,6 +128,8 @@ const Main = () => {
           setSelectedPlayers={setSelectedPlayers}
           selectedGridSize={selectedGridSize}
           setSelectedGridSize={setSelectedGridSize}
+          setMoves={setMoves}
+          setTime={setTime}
         />
       )}
     </>

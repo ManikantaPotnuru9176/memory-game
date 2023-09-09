@@ -1,12 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "./Button";
 
-const Navbar = ({ setNewGame }) => {
+const Navbar = ({
+  setNewGame,
+  selectedPlayers,
+  setIsTimerRunning,
+  isTimerRunning,
+  setMoves,
+  setTime,
+  setFlippedValues,
+  setFlippedCount,
+  shuffleGridValues,
+  setPlayers,
+}) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pausePlay, setPausePlay] = useState("Play Game");
 
+  useEffect(() => {
+    if (isTimerRunning && pausePlay === "Pause Game") return;
+    if (!isTimerRunning && pausePlay === "Play Game") return;
+    setPausePlay((prev) => (prev === "Play Game" ? "Pause Game" : "Play Game"));
+  }, [isTimerRunning]);
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleRestart = () => {
+    shuffleGridValues();
+    setMoves(0);
+    setTime(0);
+    setFlippedCount(0);
+    setIsTimerRunning(false);
+    setFlippedValues([]);
+    setPlayers((prev) => prev.map((player) => ({ ...player, score: 0 })));
   };
 
   return (
@@ -26,16 +53,19 @@ const Navbar = ({ setNewGame }) => {
               </button>
             </div>
             <div className="hidden md:flex md:gap-2 lg:gap-4">
-              <Button text="Restart" primary />
+              <Button text="Restart" primary onClick={() => handleRestart()} />
               <Button text="New Game" onClick={() => setNewGame(true)} />
-              <Button
-                text={pausePlay}
-                onClick={() =>
-                  setPausePlay((prev) =>
-                    prev === "Play Game" ? "Pause Game" : "Play Game"
-                  )
-                }
-              />
+              {selectedPlayers === 1 && (
+                <Button
+                  text={pausePlay}
+                  onClick={() => {
+                    setIsTimerRunning(pausePlay === "Play Game" ? true : false);
+                    setPausePlay((prev) =>
+                      prev === "Play Game" ? "Pause Game" : "Play Game"
+                    );
+                  }}
+                />
+              )}
             </div>
           </nav>
         </div>
@@ -60,15 +90,18 @@ const Navbar = ({ setNewGame }) => {
                 setNewGame(true);
               }}
             />
-            <Button
-              text={pausePlay}
-              onClick={() => {
-                toggleMobileMenu();
-                setPausePlay((prev) =>
-                  prev === "Play Game" ? "Pause Game" : "Play Game"
-                );
-              }}
-            />
+            {selectedPlayers === 1 && (
+              <Button
+                text={pausePlay}
+                onClick={() => {
+                  setIsTimerRunning(pausePlay === "Play Game" ? true : false);
+                  toggleMobileMenu();
+                  setPausePlay((prev) =>
+                    prev === "Play Game" ? "Pause Game" : "Play Game"
+                  );
+                }}
+              />
+            )}
           </div>
         </div>
       )}

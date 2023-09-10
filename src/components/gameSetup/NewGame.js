@@ -1,17 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Option from "./Option";
+import FormField from "./FormField";
 
-const NewGame = ({
-  setNewGame,
-  selectedTheme,
-  setSelectedTheme,
-  selectedPlayers,
-  setSelectedPlayers,
-  selectedGridSize,
-  setSelectedGridSize,
-  setMoves,
-  setTime,
-}) => {
+const NewGame = ({ settings, setSettings }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -20,34 +10,16 @@ const NewGame = ({
     }, 100);
   }, []);
 
-  const handleThemeChange = (theme) => {
-    setSelectedTheme(theme);
+  const handleOptionChange = (key, value) => {
+    setSettings((prev) => ({ ...prev, [key]: value }));
+    console.log(settings);
   };
 
-  const handlePlayersChange = (players) => {
-    setSelectedPlayers(players);
+  const options = {
+    themeOptions: ["Numbers", "Icons"],
+    playerOptions: [1, 2, 3, 4],
+    gridSizeOptions: ["4x4", "6x6"],
   };
-
-  const handleGridSizeChange = (size) => {
-    setSelectedGridSize(size);
-  };
-
-  const themeOptions = ["Numbers", "Icons"];
-
-  const playerOptions = [1, 2, 3, 4];
-
-  const gridSizeOptions = ["4x4", "6x6"];
-
-  const renderOptions = (options, selectedValue, onChange) =>
-    options.map((option) => (
-      <Option
-        key={option}
-        options={options}
-        option={option}
-        selectedValue={selectedValue}
-        onChange={onChange}
-      />
-    ));
 
   return (
     <div
@@ -66,52 +38,30 @@ const NewGame = ({
         </h1>
         <div className="bg-white p-6 md:p-14 rounded-lg md:rounded-xl lg:rounded-2xl max-w-[40.875rem] mx-auto">
           <form className="flex flex-col gap-6">
-            <div tabIndex="0" className="absolute" aria-hidden="true"></div>
-            <fieldset className="flex flex-col">
-              <legend className="text-[#819cae] text-lg md:text-xl font-bold">
-                Select Theme
-              </legend>
-              <div className="pt-3 md:pt-4 flex gap-3 md:gap-[1.875rem] md:text-[1.625rem]">
-                {renderOptions(themeOptions, selectedTheme, handleThemeChange)}
-              </div>
-            </fieldset>
-            <fieldset className="flex flex-col">
-              <legend className="text-[#819cae] text-lg md:text-xl font-bold">
-                Numbers of Players
-              </legend>
-              <div className="pt-3 md:pt-4 flex gap-3 md:gap-[1.875rem] md:text-[1.625rem]">
-                {renderOptions(
-                  playerOptions,
-                  selectedPlayers,
-                  handlePlayersChange
-                )}
-              </div>
-            </fieldset>
-            <fieldset className="flex flex-col">
-              <legend className="text-[#819cae] text-lg md:text-xl font-bold">
-                Grid Size
-              </legend>
-              <div className="pt-3 md:pt-4 flex gap-3 md:gap-[1.875rem] md:text-[1.625rem]">
-                {renderOptions(
-                  gridSizeOptions,
-                  selectedGridSize,
-                  handleGridSizeChange
-                )}
-              </div>
-            </fieldset>
+            <FormField
+              legend="Select Theme"
+              options={options.themeOptions}
+              selectedValue={settings.selectedTheme}
+              onChange={(theme) => handleOptionChange("selectedTheme", theme)}
+            />
+            <FormField
+              legend="Numbers of Players"
+              options={options.playerOptions}
+              selectedValue={settings.selectedPlayers}
+              onChange={(players) =>
+                handleOptionChange("selectedPlayers", players)
+              }
+            />
+            <FormField
+              legend="Grid Size"
+              options={options.gridSizeOptions}
+              selectedValue={settings.selectedGridSize}
+              onChange={(size) => handleOptionChange("selectedGridSize", size)}
+            />
             <div className="pt-2">
-              <button
-                className="w-full text-4.125 md:text-3xl font-extrabold bg-[#fca417] hover:bg-[#fcba4f] focus-visible:bg-yellow-900 text-white leading-[2.7] md:leading-[2.187] rounded-full"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setNewGame(false);
-                  setMoves(0);
-                  setTime(0);
-                }}
-              >
+              <button className="w-full text-4.125 md:text-3xl font-extrabold bg-[#fca417] hover:bg-[#fcba4f] focus-visible:bg-yellow-900 text-white leading-[2.7] md:leading-[2.187] rounded-full">
                 Start Game
               </button>
-              <div tabIndex="0" className="absolute" aria-hidden="true"></div>
             </div>
           </form>
         </div>

@@ -12,7 +12,6 @@ const Grid = ({
   playersData,
 }) => {
   const isInitialRender = useRef(true);
-  const gridSize = settings.selectedGridSize === "4x4" ? 4 : 6;
 
   const handleMatch = (firstIndex, secondIndex) => {
     const { gridValues } = grid;
@@ -76,7 +75,7 @@ const Grid = ({
         handleMatch(firstIndex, secondIndex);
       }, 600);
     }
-  }, [grid.flippedCount, grid.flippedValues, gridSize, grid.gridValues]);
+  }, [grid.flippedCount, grid.flippedValues, grid.gridSize, grid.gridValues]);
 
   const handleRotation = (index) => {
     if (grid.flippedCount < 2 && !grid.gridValues[index].status) {
@@ -101,8 +100,8 @@ const Grid = ({
     <div className="flex flex-col justify-center items-center pb-6 md:pb-0">
       <div
         className={`grid ${
-          gridSize === 4 ? "grid-cols-4" : "grid-cols-6"
-        } gap-2 md:${gridSize === 4 ? "gap-4" : "gap-2"}`}
+          grid.gridSize === 4 ? "grid-cols-4" : "grid-cols-6"
+        } gap-2 md:${grid.gridSize === 4 ? "gap-4" : "gap-2"}`}
       >
         {grid.gridValues.map((rotated, index) => (
           <GridItem
@@ -110,7 +109,7 @@ const Grid = ({
             rotated={rotated}
             handleRotation={handleRotation}
             index={index}
-            gridSize={gridSize}
+            gridSize={grid.gridSize}
           />
         ))}
       </div>

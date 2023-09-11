@@ -1,17 +1,12 @@
 import React, { useState } from "react";
 import Button from "./Button";
 
-const Navbar = ({ settings, setSettings }) => {
+const Navbar = ({ settings, setSettings, handleRestart }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pausePlay, setPausePlay] = useState("Play Game");
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const handleRestart = () => {
-    setPausePlay("Play Game");
-    if (isMobileMenuOpen) toggleMobileMenu();
   };
 
   const shouldRenderPausePlayButton = settings.selectedPlayers === 1;
@@ -33,7 +28,14 @@ const Navbar = ({ settings, setSettings }) => {
               </button>
             </div>
             <div className="hidden md:flex md:gap-2 lg:gap-4">
-              <Button text="Restart" primary onClick={handleRestart} />
+              <Button
+                text="Restart"
+                primary
+                onClick={() => {
+                  setPausePlay("Play Game");
+                  handleRestart();
+                }}
+              />
               <Button
                 text="New Game"
                 onClick={() => {
@@ -69,7 +71,15 @@ const Navbar = ({ settings, setSettings }) => {
             className="z-50 w-11/12 sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 bg-white text-3xl md:text-4xl lg:text-5xl xl:text-6xl rounded-md flex flex-col gap-4 px-4 sm:px-6 md:px-8 xl:px-10 py-6 sm:py-8 md:py-10 pointer-events-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <Button text="Restart" onClick={handleRestart} primary />
+            <Button
+              text="Restart"
+              onClick={() => {
+                setPausePlay("Play Game");
+                handleRestart();
+                toggleMobileMenu();
+              }}
+              primary
+            />
             <Button
               text="New Game"
               onClick={() => {

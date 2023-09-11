@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import FormField from "./FormField";
 
-const NewGame = ({ settings, setSettings }) => {
+const NewGame = ({ settings, setSettings, shuffleGridValues }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -12,7 +12,6 @@ const NewGame = ({ settings, setSettings }) => {
 
   const handleOptionChange = (key, value) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
-    console.log(settings);
   };
 
   const options = {
@@ -66,6 +65,7 @@ const NewGame = ({ settings, setSettings }) => {
                 onClick={(e) => {
                   e.preventDefault();
                   setSettings((prev) => ({ ...prev, status: false }));
+                  shuffleGridValues();
                 }}
               >
                 Start Game

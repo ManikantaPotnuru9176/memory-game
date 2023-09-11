@@ -1,6 +1,6 @@
 import React from "react";
 
-const Moves = ({ moves }) => {
+const Moves = ({ gameStatus }) => {
   return (
     <div className="w-[150px] md:w-[260px] h-[80px] md:h-[68px] bg-[#dfe7ec] rounded-lg">
       <div className="px-5 pt-2 md:pt-4 flex flex-col md:flex-row md:justify-between items-center gap-1">
@@ -8,7 +8,7 @@ const Moves = ({ moves }) => {
           Moves
         </span>
         <span className="text-[#31485b] text-2xl md:text-3xl font-bold">
-          {moves}
+          {gameStatus.moves}
         </span>
       </div>
     </div>

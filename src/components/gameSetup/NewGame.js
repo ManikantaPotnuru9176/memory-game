@@ -23,7 +23,9 @@ const NewGame = ({ settings, setSettings }) => {
 
   return (
     <div
-      className={`fixed inset-0 bg-[#142838] transform transition-transform ease-in-out duration-500 ${
+      className={`${
+        settings.status ? "block" : "hidden"
+      } fixed inset-0 bg-[#142838] transform transition-transform ease-in-out duration-500 ${
         isVisible ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -59,7 +61,13 @@ const NewGame = ({ settings, setSettings }) => {
               onChange={(size) => handleOptionChange("selectedGridSize", size)}
             />
             <div className="pt-2">
-              <button className="w-full text-4.125 md:text-3xl font-extrabold bg-[#fca417] hover:bg-[#fcba4f] focus-visible:bg-yellow-900 text-white leading-[2.7] md:leading-[2.187] rounded-full">
+              <button
+                className="w-full text-4.125 md:text-3xl font-extrabold bg-[#fca417] hover:bg-[#fcba4f] focus-visible:bg-yellow-900 text-white leading-[2.7] md:leading-[2.187] rounded-full"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSettings((prev) => ({ ...prev, status: false }));
+                }}
+              >
                 Start Game
               </button>
             </div>

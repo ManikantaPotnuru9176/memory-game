@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 const Main = () => {
   const [settings, setSettings] = useState({
-    status: true,
+    status: false,
     selectedTheme: "Numbers",
     selectedPlayers: 1,
     selectedGridSize: "4x4",
@@ -64,12 +64,12 @@ const Main = () => {
   return (
     <>
       <NewGame settings={settings} setSettings={setSettings} />
-      {/* <Navbar />
-      <div className="lg:container mx-auto px-4">
-            <Grid />
-          </div>
-          <Footer />
-          {totalScore * 2 === gridSize * gridSize && <GameEnd />} */}
+      <Navbar settings={settings} setSettings={setSettings} />
+      {/* <div className="lg:container mx-auto px-4">
+        <Grid />
+      </div>
+      <Footer />
+      {totalScore * 2 === gridSize * gridSize && <GameEnd />} */}
     </>
   );
 };

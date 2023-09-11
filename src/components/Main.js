@@ -27,10 +27,13 @@ const Main = () => {
 
   const [playersData, setPlayersData] = useState({
     currPlayer: 1,
-    players: Array.from({ length: settings.selectedPlayers }, (_, index) => ({
-      id: index + 1,
-      score: 0,
-    })),
+    players: Array.from(
+      { length: settings.selectedPlayers === "4x4" ? 4 : 6 },
+      (_, index) => ({
+        id: index + 1,
+        score: 0,
+      })
+    ),
   });
 
   const [totalScore, setTotalScore] = useState(0);
@@ -46,6 +49,7 @@ const Main = () => {
   }, [settings.selectedPlayers]);
 
   const shuffleGridValues = () => {
+    const gridSize = settings.selectedGridSize === "4x4" ? 4 : 6;
     const pairs = Array.from(
       { length: (gridSize * gridSize) / 2 },
       (_, index) => index + 1
@@ -57,18 +61,26 @@ const Main = () => {
       bgColor: "bg-[#bbcdd8]",
       status: false,
     }));
-
-    setGridValues(initialRotationState);
+    setGrid((prevGrid) => ({ ...prevGrid, gridValues: initialRotationState }));
   };
 
   return (
     <>
       <NewGame settings={settings} setSettings={setSettings} />
       <Navbar settings={settings} setSettings={setSettings} />
-      {/* <div className="lg:container mx-auto px-4">
-        <Grid />
+      <div className="lg:container mx-auto px-4">
+        <Grid
+          settings={settings}
+          grid={grid}
+          setGrid={setGrid}
+          shuffleGridValues={shuffleGridValues}
+          setGameStatus={setGameStatus}
+          setTotalScore={setTotalScore}
+          setPlayersData={setPlayersData}
+          playersData={playersData}
+        />
       </div>
-      <Footer />
+      {/* <Footer />
       {totalScore * 2 === gridSize * gridSize && <GameEnd />} */}
     </>
   );

@@ -25,7 +25,7 @@ const NewGame = ({ settings, setSettings }) => {
     <div
       className={`${
         settings.status ? "block" : "hidden"
-      } fixed inset-0 bg-[#142838] transform transition-transform ease-in-out duration-500 ${
+      } z-50 fixed inset-0 bg-[#142838] transform transition-transform ease-in-out duration-500 ${
         isVisible ? "translate-x-0" : "-translate-x-full"
       }`}
     >

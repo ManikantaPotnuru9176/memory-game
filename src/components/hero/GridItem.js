@@ -1,6 +1,7 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
-const GridItem = ({ rotated, handleRotation, index, gridSize }) => {
+const GridItem = ({ gridValue, handleRotation, index, gridSize, settings }) => {
   const itemSizeClass =
     gridSize === 6
       ? "w-[3.2rem] h-[3.2rem] md:w-[4.5rem] md:h-[4.5rem]"
@@ -9,23 +10,27 @@ const GridItem = ({ rotated, handleRotation, index, gridSize }) => {
   return (
     <button
       className={`relative ${itemSizeClass} rounded-full text-white overflow-hidden cursor-pointer shadow-2xl transition-all duration-300 ${
-        rotated.status ? "[transform:rotateY(180deg)]" : ""
+        gridValue.status ? "[transform:rotateY(180deg)]" : ""
       }`}
       onClick={() => handleRotation(index)}
     >
       <div
         className={`absolute inset-0 w-full h-full flex justify-center items-center bg-[#152937] hover:bg-[#6393b6] transition-all duration-100 z-20 ${
-          rotated.status ? "duration-300 opacity-0" : ""
+          gridValue.status ? "duration-300 opacity-0" : ""
         }`}
       ></div>
       <div
         className={`absolute inset-0 w-full h-full flex justify-center items-center ${
-          rotated.bgColor
+          gridValue.bgColor
         } text-2xl md:text-4xl font-extrabold transition-all z-10 ${
-          rotated.status ? "[transform:rotateY(180deg)]" : ""
+          gridValue.status ? "[transform:rotateY(180deg)]" : ""
         }`}
       >
-        {rotated.value}
+        {settings?.selectedTheme === "Numbers" ? (
+          gridValue.value
+        ) : (
+          <FontAwesomeIcon color="white" icon={gridValue.value} size="lg" />
+        )}
       </div>
     </button>
   );

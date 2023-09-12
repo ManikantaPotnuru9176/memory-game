@@ -103,13 +103,14 @@ const Grid = ({
           grid.gridSize === 4 ? "grid-cols-4" : "grid-cols-6"
         } gap-2 md:${grid.gridSize === 4 ? "gap-4" : "gap-2"}`}
       >
-        {grid.gridValues.map((rotated, index) => (
+        {grid.gridValues.map((gridValue, index) => (
           <GridItem
             key={index}
-            rotated={rotated}
+            gridValue={gridValue}
             handleRotation={handleRotation}
             index={index}
             gridSize={grid.gridSize}
+            settings={settings}
           />
         ))}
       </div>

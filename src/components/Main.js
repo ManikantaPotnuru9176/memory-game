@@ -4,6 +4,26 @@ import Footer from "@/components/footer/Footer";
 import NewGame from "@/components/gameSetup/NewGame";
 import GameEnd from "@/components/gameEnd/GameEnd";
 import { useEffect, useState } from "react";
+import {
+  faCat,
+  faDog,
+  faHippo,
+  faSpider,
+  faFish,
+  faDragon,
+  faKiwiBird,
+  faWorm,
+  faShrimp,
+  faMosquito,
+  faHorse,
+  faFrog,
+  faDove,
+  faBugs,
+  faOtter,
+  faLocust,
+  faCow,
+  faCrow,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Main = () => {
   const [settings, setSettings] = useState({
@@ -54,10 +74,34 @@ const Main = () => {
   }, [settings.selectedPlayers]);
 
   const shuffleGridValues = () => {
-    const pairs = Array.from(
-      { length: (grid.gridSize * grid.gridSize) / 2 },
-      (_, index) => index + 1
-    );
+    const pairs =
+      settings.selectedTheme === "Numbers"
+        ? Array.from(
+            { length: (grid.gridSize * grid.gridSize) / 2 },
+            (_, index) => index + 1
+          )
+        : [
+            faCat,
+            faDog,
+            faHippo,
+            faSpider,
+            faFish,
+            faDragon,
+            faKiwiBird,
+            faWorm,
+            faShrimp,
+            faMosquito,
+            faHorse,
+            faFrog,
+            faDove,
+            faBugs,
+            faOtter,
+            faDove,
+            faLocust,
+            faCow,
+            faCrow,
+          ].slice(0, (grid.gridSize * grid.gridSize) / 2);
+
     const shuffledPairs = [...pairs, ...pairs].sort(() => Math.random() - 0.5);
 
     const initialRotationState = shuffledPairs.map((value) => ({

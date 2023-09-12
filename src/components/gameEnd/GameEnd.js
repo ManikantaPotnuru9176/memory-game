@@ -43,7 +43,7 @@ const GameEnd = ({
           title:
             playersData.players.filter((player) => player.score === maxScore)
               .length === 1
-              ? `Player ${players[0].id} Wins!`
+              ? `Player ${playersData.players[0].id} Wins!`
               : "It's a tie!",
           subtitle: "Game over! Here are the results...",
           data: playersData.players.map((player) => ({

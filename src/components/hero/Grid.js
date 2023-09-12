@@ -2,78 +2,97 @@ import React, { useEffect, useRef } from "react";
 import GridItem from "./GridItem";
 
 const Grid = ({
-  setIsTimerRunning,
-  setMoves,
-  gridValues,
-  setGridValues,
-  flippedValues,
-  setFlippedValues,
-  flippedCount,
-  setFlippedCount,
-  shuffleGridValues,
-  gridSize,
-  currPlayer,
-  setCurrPlayer,
-  selectedPlayers,
-  setPlayers,
+  settings,
+  grid,
+  setGrid,
+  setGameStatus,
   setTotalScore,
+  setPlayersData,
+  shuffleGridValues,
+  playersData,
 }) => {
   const isInitialRender = useRef(true);
+
+  const handleMatch = (firstIndex, secondIndex) => {
+    const { gridValues } = grid;
+    const firstValue = gridValues[firstIndex].value;
+    const secondValue = gridValues[secondIndex].value;
+
+    const matched = firstValue === secondValue;
+    const newGridValues = gridValues.map((gridValue, index) => {
+      if (index === firstIndex || index === secondIndex) {
+        return {
+          ...gridValue,
+          status: matched,
+          bgColor: matched ? "bg-[#fca516]" : "bg-[#bbcdd8]",
+        };
+      }
+      return gridValue;
+    });
+
+    if (matched) {
+      setTotalScore((prev) => prev + 1);
+      setPlayersData((prevPlayer) => ({
+        ...prevPlayer,
+        players: prevPlayer.players.map((player) =>
+          player.id === playersData.currPlayer
+            ? { ...player, score: player.score + 1 }
+            : player
+        ),
+      }));
+    }
+
+    if (settings.selectedPlayers === 1) {
+      setGameStatus((prevGame) => ({
+        ...prevGame,
+        moves: prevGame.moves + 1,
+      }));
+    } else {
+      setPlayersData((prevPlayers) => ({
+        ...prevPlayers,
+        currPlayer:
+          prevPlayers.currPlayer === settings.selectedPlayers
+            ? 1
+            : prevPlayers.currPlayer + 1,
+      }));
+    }
+
+    setGrid((prevGrid) => ({
+      ...prevGrid,
+      gridValues: newGridValues,
+      flippedValues: [],
+      flippedCount: 0,
+    }));
+  };
 
   useEffect(() => {
     if (isInitialRender.current) {
       isInitialRender.current = false;
       shuffleGridValues();
-    } else {
-      if (flippedCount === 2) {
-        setTimeout(() => {
-          const [firstIndex, secondIndex] = flippedValues;
-          const firstValue = gridValues[firstIndex].value;
-          const secondValue = gridValues[secondIndex].value;
-
-          const matched = firstValue === secondValue;
-          const newGridValues = [...gridValues];
-
-          [firstIndex, secondIndex].forEach((index) => {
-            newGridValues[index].status = matched ? true : false;
-            newGridValues[index].bgColor = matched
-              ? "bg-[#fca516]"
-              : "bg-[#bbcdd8]";
-          });
-
-          if (matched) {
-            setTotalScore((prev) => prev + 1);
-            setPlayers((prev) =>
-              prev.map((player) =>
-                player.id === currPlayer
-                  ? { ...player, score: player.score + 1 }
-                  : player
-              )
-            );
-          }
-          if (selectedPlayers === 1) setMoves((prev) => prev + 1);
-          else
-            setCurrPlayer((prev) => {
-              if (prev === selectedPlayers) prev = 0;
-              return prev + 1;
-            });
-          setGridValues(newGridValues);
-          setFlippedCount(0);
-          setFlippedValues([]);
-        }, 600);
-      }
+    } else if (grid.flippedCount === 2) {
+      setTimeout(() => {
+        const [firstIndex, secondIndex] = grid.flippedValues;
+        handleMatch(firstIndex, secondIndex);
+      }, 600);
     }
-  }, [flippedCount, flippedValues, gridSize, gridValues]);
+  }, [grid.flippedCount, grid.flippedValues, grid.gridSize, grid.gridValues]);
 
   const handleRotation = (index) => {
-    if (flippedCount < 2 && !gridValues[index].status) {
-      const newGridValues = [...gridValues];
-      newGridValues[index].status = true;
+    if (grid.flippedCount < 2 && !grid.gridValues[index].status) {
+      const newGridValues = grid.gridValues.map((gridValue, i) => {
+        if (i === index) {
+          return { ...gridValue, status: true };
+        }
+        return gridValue;
+      });
 
-      setGridValues(newGridValues);
-      setFlippedCount((count) => count + 1);
-      setFlippedValues((values) => [...values, index]);
-      setIsTimerRunning(true);
+      setGrid((prevGrid) => ({
+        ...prevGrid,
+        gridValues: newGridValues,
+        flippedValues: [...prevGrid.flippedValues, index],
+        flippedCount: prevGrid.flippedCount + 1,
+      }));
+      setGameStatus((prevGame) => ({ ...prevGame, isTimerRunning: true }));
     }
   };
 
@@ -81,16 +100,17 @@ const Grid = ({
     <div className="flex flex-col justify-center items-center pb-6 md:pb-0">
       <div
         className={`grid ${
-          gridSize === 4 ? "grid-cols-4" : "grid-cols-6"
-        } gap-2 md:${gridSize === 4 ? "gap-4" : "gap-2"}`}
+          grid.gridSize === 4 ? "grid-cols-4" : "grid-cols-6"
+        } gap-2 md:${grid.gridSize === 4 ? "gap-4" : "gap-2"}`}
       >
-        {gridValues.map((rotated, index) => (
+        {grid.gridValues.map((gridValue, index) => (
           <GridItem
             key={index}
-            rotated={rotated}
+            gridValue={gridValue}
             handleRotation={handleRotation}
             index={index}
-            gridSize={gridSize}
+            gridSize={grid.gridSize}
+            settings={settings}
           />
         ))}
       </div>

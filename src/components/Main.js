@@ -4,52 +4,104 @@ import Footer from "@/components/footer/Footer";
 import NewGame from "@/components/gameSetup/NewGame";
 import GameEnd from "@/components/gameEnd/GameEnd";
 import { useEffect, useState } from "react";
+import {
+  faCat,
+  faDog,
+  faHippo,
+  faSpider,
+  faFish,
+  faDragon,
+  faKiwiBird,
+  faWorm,
+  faShrimp,
+  faMosquito,
+  faHorse,
+  faFrog,
+  faDove,
+  faBugs,
+  faOtter,
+  faLocust,
+  faCow,
+  faCrow,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Main = () => {
-  const [newGame, setNewGame] = useState(false);
+  const [settings, setSettings] = useState({
+    status: false,
+    selectedTheme: "Numbers",
+    selectedPlayers: 1,
+    selectedGridSize: "4x4",
+  });
 
-  const [selectedTheme, setSelectedTheme] = useState("Numbers");
-  const [selectedPlayers, setSelectedPlayers] = useState(1);
-  const [selectedGridSize, setSelectedGridSize] = useState("4x4");
+  const [gameStatus, setGameStatus] = useState({
+    isTimerRunning: false,
+    moves: 0,
+    time: 0,
+  });
 
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [grid, setGrid] = useState({
+    gridValues: [],
+    flippedValues: [],
+    flippedCount: 0,
+    gridSize: 4,
+  });
 
-  const [moves, setMoves] = useState(0);
-  const [time, setTime] = useState(0);
-
-  const [gridValues, setGridValues] = useState([]);
-  const [flippedValues, setFlippedValues] = useState([]);
-  const [flippedCount, setFlippedCount] = useState(0);
-  const [gridSize, setGridSize] = useState(4);
-
-  const [currPlayer, setCurrPlayer] = useState(1);
-  const [players, setPlayers] = useState(
-    Array.from({ length: selectedPlayers }, (_, index) => ({
+  const [playersData, setPlayersData] = useState({
+    currPlayer: 1,
+    players: Array.from({ length: 4 }, (_, index) => ({
       id: index + 1,
       score: 0,
-    }))
-  );
+    })),
+  });
 
   const [totalScore, setTotalScore] = useState(0);
 
   useEffect(() => {
-    setGridSize(selectedGridSize === "4x4" ? 4 : 6);
-  }, [selectedGridSize]);
+    setGrid((prev) => ({
+      ...prev,
+      gridSize: settings.selectedGridSize === "4x4" ? 4 : 6,
+    }));
+  }, [settings.selectedGridSize]);
 
   useEffect(() => {
-    setPlayers(
-      Array.from({ length: selectedPlayers }, (_, index) => ({
+    setPlayersData((prev) => ({
+      ...prev,
+      players: Array.from({ length: settings.selectedPlayers }, (_, index) => ({
         id: index + 1,
         score: 0,
-      }))
-    );
-  }, [selectedPlayers]);
+      })),
+    }));
+  }, [settings.selectedPlayers]);
 
   const shuffleGridValues = () => {
-    const pairs = Array.from(
-      { length: (gridSize * gridSize) / 2 },
-      (_, index) => index + 1
-    );
+    const pairs =
+      settings.selectedTheme === "Numbers"
+        ? Array.from(
+            { length: (grid.gridSize * grid.gridSize) / 2 },
+            (_, index) => index + 1
+          )
+        : [
+            faCat,
+            faDog,
+            faHippo,
+            faSpider,
+            faFish,
+            faDragon,
+            faKiwiBird,
+            faWorm,
+            faShrimp,
+            faMosquito,
+            faHorse,
+            faFrog,
+            faDove,
+            faBugs,
+            faOtter,
+            faDove,
+            faLocust,
+            faCow,
+            faCrow,
+          ].slice(0, (grid.gridSize * grid.gridSize) / 2);
+
     const shuffledPairs = [...pairs, ...pairs].sort(() => Math.random() - 0.5);
 
     const initialRotationState = shuffledPairs.map((value) => ({
@@ -57,84 +109,65 @@ const Main = () => {
       bgColor: "bg-[#bbcdd8]",
       status: false,
     }));
+    setGrid((prevGrid) => ({ ...prevGrid, gridValues: initialRotationState }));
+  };
 
-    setGridValues(initialRotationState);
+  const handleRestart = () => {
+    setGameStatus({ isTimerRunning: false, moves: 0, time: 0 });
+    setGrid((prev) => ({
+      gridValues: [],
+      flippedValues: [],
+      flippedCount: 0,
+      gridSize: prev.gridSize,
+    }));
+    setTotalScore(0);
+    setPlayersData((prev) => ({
+      currPlayer: 1,
+      players: prev.players.map((player) => ({ ...player, score: 0 })),
+    }));
+    shuffleGridValues();
   };
 
   return (
     <>
-      {!newGame ? (
-        <>
-          <Navbar
-            setNewGame={setNewGame}
-            selectedPlayers={selectedPlayers}
-            setIsTimerRunning={setIsTimerRunning}
-            isTimerRunning={isTimerRunning}
-            setMoves={setMoves}
-            setTime={setTime}
-            setFlippedValues={setFlippedValues}
-            setFlippedCount={setFlippedCount}
-            shuffleGridValues={shuffleGridValues}
-            setPlayers={setPlayers}
-          />
-          <div className="lg:container mx-auto px-4">
-            <Grid
-              gridSize={gridSize}
-              selectedGridSize={selectedGridSize}
-              setIsTimerRunning={setIsTimerRunning}
-              setMoves={setMoves}
-              gridValues={gridValues}
-              setGridValues={setGridValues}
-              flippedValues={flippedValues}
-              setFlippedValues={setFlippedValues}
-              flippedCount={flippedCount}
-              setFlippedCount={setFlippedCount}
-              shuffleGridValues={shuffleGridValues}
-              currPlayer={currPlayer}
-              setCurrPlayer={setCurrPlayer}
-              selectedPlayers={selectedPlayers}
-              setPlayers={setPlayers}
-              setTotalScore={setTotalScore}
-            />
-          </div>
-          <Footer
-            isTimerRunning={isTimerRunning}
-            selectedPlayers={selectedPlayers}
-            moves={moves}
-            time={time}
-            setTime={setTime}
-            currPlayer={currPlayer}
-            players={players}
-          />
-          {totalScore * 2 === gridSize * gridSize && (
-            <GameEnd
-              setNewGame={setNewGame}
-              selectedPlayers={selectedPlayers}
-              time={time}
-              moves={moves}
-              players={players}
-              setIsTimerRunning={setIsTimerRunning}
-              shuffleGridValues={shuffleGridValues}
-              setTime={setTime}
-              setMoves={setMoves}
-              setFlippedCount={setFlippedCount}
-              setFlippedValues={setFlippedValues}
-              setTotalScore={setTotalScore}
-              setPlayers={setPlayers}
-            />
-          )}
-        </>
-      ) : (
-        <NewGame
-          setNewGame={setNewGame}
-          selectedTheme={selectedTheme}
-          setSelectedTheme={setSelectedTheme}
-          selectedPlayers={selectedPlayers}
-          setSelectedPlayers={setSelectedPlayers}
-          selectedGridSize={selectedGridSize}
-          setSelectedGridSize={setSelectedGridSize}
-          setMoves={setMoves}
-          setTime={setTime}
+      <NewGame
+        settings={settings}
+        setSettings={setSettings}
+        shuffleGridValues={shuffleGridValues}
+      />
+      <Navbar
+        settings={settings}
+        setSettings={setSettings}
+        handleRestart={handleRestart}
+        setGameStatus={setGameStatus}
+        gameStatus={gameStatus}
+      />
+      <div className="lg:container mx-auto px-4">
+        <Grid
+          settings={settings}
+          grid={grid}
+          setGrid={setGrid}
+          shuffleGridValues={shuffleGridValues}
+          setGameStatus={setGameStatus}
+          setTotalScore={setTotalScore}
+          setPlayersData={setPlayersData}
+          playersData={playersData}
+        />
+      </div>
+      <Footer
+        settings={settings}
+        gameStatus={gameStatus}
+        setGameStatus={setGameStatus}
+        playersData={playersData}
+      />
+      {totalScore * 2 === grid.gridSize * grid.gridSize && (
+        <GameEnd
+          settings={settings}
+          setSettings={setSettings}
+          gameStatus={gameStatus}
+          playersData={playersData}
+          setGameStatus={setGameStatus}
+          handleRestart={handleRestart}
         />
       )}
     </>

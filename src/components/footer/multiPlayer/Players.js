@@ -1,14 +1,14 @@
 import React from "react";
 import Player from "./Player";
 
-const Players = ({ currPlayer, players }) => {
+const Players = ({ playersData }) => {
   return (
     <div className="flex flex-row justify-center gap-3 md:gap-6 px-5">
-      {players.map((player) => (
+      {playersData.players.map((player) => (
         <Player
           key={player.id}
           playerIndex={player.id}
-          currPlayer={currPlayer}
+          currPlayer={playersData.currPlayer}
           playerScore={player.score}
         />
       ))}

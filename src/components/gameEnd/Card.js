@@ -1,6 +1,6 @@
 import React from "react";
 
-const Card = ({ details, setNewGame, handleRestart }) => {
+const Card = ({ details, setSettings, handleRestart }) => {
   const { title, subtitle, data } = details;
 
   return (
@@ -56,7 +56,10 @@ const Card = ({ details, setNewGame, handleRestart }) => {
             className="basis-full text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#dfe7ec] hover:bg-[#6393b6] text-[#32485a] hover:text-white"
             onClick={() => {
               handleRestart();
-              setNewGame(true);
+              setSettings((prevSettings) => ({
+                ...prevSettings,
+                status: true,
+              }));
             }}
           >
             Setup New Game

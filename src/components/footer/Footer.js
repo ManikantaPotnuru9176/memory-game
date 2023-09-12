@@ -3,25 +3,17 @@ import GameStatus from "./singlePlayer/GameStatus";
 import Players from "./multiPlayer/Players";
 
 const Footer = ({
-  selectedPlayers,
-  isTimerRunning,
-  moves,
-  time,
-  setTime,
-  currPlayer,
-  players,
+  settings,
+  gameStatus,
+  setGameStatus,
+  playersData,
 }) => {
   return (
     <div className="pt-8 md:pt-12 lg:pt-16">
-      {selectedPlayers === 1 ? (
-        <GameStatus
-          isTimerRunning={isTimerRunning}
-          moves={moves}
-          time={time}
-          setTime={setTime}
-        />
+      {settings.selectedPlayers === 1 ? (
+        <GameStatus gameStatus={gameStatus} setGameStatus={setGameStatus} />
       ) : (
-        <Players currPlayer={currPlayer} players={players} />
+        <Players playersData={playersData} />
       )}
     </div>
   );

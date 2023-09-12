@@ -2,38 +2,37 @@ import React, { useEffect, useState } from "react";
 import Button from "./Button";
 
 const Navbar = ({
-  setNewGame,
-  selectedPlayers,
-  setIsTimerRunning,
-  isTimerRunning,
-  setMoves,
-  setTime,
-  setFlippedValues,
-  setFlippedCount,
-  shuffleGridValues,
-  setPlayers,
+  settings,
+  setSettings,
+  handleRestart,
+  setGameStatus,
+  gameStatus,
 }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [pausePlay, setPausePlay] = useState("Play Game");
+  const [pausePlay, setPausePlay] = useState("Start Game");
 
   useEffect(() => {
-    if (isTimerRunning && pausePlay === "Pause Game") return;
-    if (!isTimerRunning && pausePlay === "Play Game") return;
-    setPausePlay((prev) => (prev === "Play Game" ? "Pause Game" : "Play Game"));
-  }, [isTimerRunning]);
+    if (!gameStatus.isTimerRunning && pausePlay === "Start Game") return;
+    setPausePlay(gameStatus.isTimerRunning ? "Pause Game" : "Resume Game");
+  }, [gameStatus.isTimerRunning]);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handleRestart = () => {
-    shuffleGridValues();
-    setMoves(0);
-    setTime(0);
-    setFlippedCount(0);
-    setIsTimerRunning(false);
-    setFlippedValues([]);
-    setPlayers((prev) => prev.map((player) => ({ ...player, score: 0 })));
+  const shouldRenderPausePlayButton = settings.selectedPlayers === 1;
+
+  const handlePausePlay = () => {
+    setGameStatus((prevGameStatus) => ({
+      ...prevGameStatus,
+      isTimerRunning: !prevGameStatus.isTimerRunning,
+    }));
+
+    setPausePlay((prev) =>
+      prev === "Start Game" || prev === "Resume Game"
+        ? "Pause Game"
+        : "Resume Game"
+    );
   };
 
   return (
@@ -46,25 +45,31 @@ const Navbar = ({
           <nav className="mt-2 md:mt-0">
             <div className="md:hidden">
               <button
-                onClick={() => toggleMobileMenu()}
+                onClick={toggleMobileMenu}
                 className="bg-[#fca516] hover:bg-[#fcba4f] text-white text-md font-bold px-4 py-2 rounded-full"
               >
                 Menu
               </button>
             </div>
             <div className="hidden md:flex md:gap-2 lg:gap-4">
-              <Button text="Restart" primary onClick={() => handleRestart()} />
-              <Button text="New Game" onClick={() => setNewGame(true)} />
-              {selectedPlayers === 1 && (
-                <Button
-                  text={pausePlay}
-                  onClick={() => {
-                    setIsTimerRunning(pausePlay === "Play Game" ? true : false);
-                    setPausePlay((prev) =>
-                      prev === "Play Game" ? "Pause Game" : "Play Game"
-                    );
-                  }}
-                />
+              <Button
+                text="Restart"
+                primary
+                onClick={() => {
+                  setPausePlay("Start Game");
+                  handleRestart();
+                }}
+              />
+              <Button
+                text="New Game"
+                onClick={() => {
+                  setPausePlay("Start Game");
+                  handleRestart();
+                  setSettings((prev) => ({ ...prev, status: true }));
+                }}
+              />
+              {shouldRenderPausePlayButton && (
+                <Button text={pausePlay} onClick={handlePausePlay} />
               )}
             </div>
           </nav>
@@ -73,7 +78,7 @@ const Navbar = ({
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 grid place-items-center bg-gray-800 bg-opacity-50 z-50"
-          onClick={() => toggleMobileMenu()}
+          onClick={toggleMobileMenu}
         >
           <div
             role="dialog"
@@ -82,23 +87,30 @@ const Navbar = ({
             className="z-50 w-11/12 sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 bg-white text-3xl md:text-4xl lg:text-5xl xl:text-6xl rounded-md flex flex-col gap-4 px-4 sm:px-6 md:px-8 xl:px-10 py-6 sm:py-8 md:py-10 pointer-events-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <Button text="Restart" onClick={() => toggleMobileMenu()} primary />
+            <Button
+              text="Restart"
+              onClick={() => {
+                setPausePlay("Start Game");
+                handleRestart();
+                toggleMobileMenu();
+              }}
+              primary
+            />
             <Button
               text="New Game"
               onClick={() => {
+                setPausePlay("Start Game");
+                setSettings((prev) => ({ ...prev, status: true }));
+                handleRestart();
                 toggleMobileMenu();
-                setNewGame(true);
               }}
             />
-            {selectedPlayers === 1 && (
+            {shouldRenderPausePlayButton && (
               <Button
                 text={pausePlay}
                 onClick={() => {
-                  setIsTimerRunning(pausePlay === "Play Game" ? true : false);
+                  handlePausePlay();
                   toggleMobileMenu();
-                  setPausePlay((prev) =>
-                    prev === "Play Game" ? "Pause Game" : "Play Game"
-                  );
                 }}
               />
             )}

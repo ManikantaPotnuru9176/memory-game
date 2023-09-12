@@ -64,6 +64,7 @@ const Navbar = ({
                 text="New Game"
                 onClick={() => {
                   setPausePlay("Start Game");
+                  handleRestart();
                   setSettings((prev) => ({ ...prev, status: true }));
                 }}
               />
@@ -100,6 +101,7 @@ const Navbar = ({
               onClick={() => {
                 setPausePlay("Start Game");
                 setSettings((prev) => ({ ...prev, status: true }));
+                handleRestart();
                 toggleMobileMenu();
               }}
             />

@@ -2,15 +2,14 @@ import React, { useEffect } from "react";
 
 const Time = ({ gameStatus, setGameStatus }) => {
   useEffect(() => {
-    if (!gameStatus.isTimerRunning) return;
-    const updateTime = () => {
-      setGameStatus((prev) => ({ ...prev, time: prev.time + 1 }));
-    };
-
-    const intervalId = setInterval(updateTime, 1000);
-
+    let intervalId;
+    if (gameStatus.isTimerRunning) {
+      intervalId = setInterval(() => {
+        setGameStatus((prev) => ({ ...prev, time: prev.time + 1 }));
+      }, 1000);
+    }
     return () => clearInterval(intervalId);
-  }, [gameStatus.isTimerRunning]);
+  }, [gameStatus.isTimerRunning, setGameStatus]);
 
   const minutes = Math.floor(gameStatus.time / 60);
   const seconds = gameStatus.time % 60;

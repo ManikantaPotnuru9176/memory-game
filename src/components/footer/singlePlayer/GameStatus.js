@@ -5,11 +5,6 @@ import Moves from "./Moves";
 const GameStatus = ({
   gameStatus,
   setGameStatus,
-
-  isTimerRunning,
-  moves,
-  time,
-  setTime,
 }) => {
   return (
     <div className="flex flex-row justify-center gap-6">

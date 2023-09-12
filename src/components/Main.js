@@ -95,6 +95,8 @@ const Main = () => {
         settings={settings}
         setSettings={setSettings}
         handleRestart={handleRestart}
+        setGameStatus={setGameStatus}
+        gameStatus={gameStatus}
       />
       <div className="lg:container mx-auto px-4">
         <Grid

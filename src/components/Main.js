@@ -116,7 +116,16 @@ const Main = () => {
         setGameStatus={setGameStatus}
         playersData={playersData}
       />
-      {/* {totalScore * 2 === gridSize * gridSize && <GameEnd />} */}
+      {totalScore * 2 === grid.gridSize * grid.gridSize && (
+        <GameEnd
+          settings={settings}
+          setSettings={setSettings}
+          gameStatus={gameStatus}
+          playersData={playersData}
+          setGameStatus={setGameStatus}
+          handleRestart={handleRestart}
+        />
+      )}
     </>
   );
 };

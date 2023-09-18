@@ -28,7 +28,7 @@ const GridItem = ({ gridValue, index }) => {
       ></div>
       <div
         className={`absolute inset-0 w-full h-full flex justify-center items-center ${
-          gridValue.bgColor
+          gridValue.bgColor === "bg-[#bbcdd8]" ? "bg-[#bbcdd8]" : "bg-[#fca516]"
         } text-2xl md:text-4xl font-extrabold transition-all z-10 ${
           gridValue.status ? "[transform:rotateY(180deg)]" : ""
         }`}

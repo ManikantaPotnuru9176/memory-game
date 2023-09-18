@@ -1,20 +1,14 @@
 import React from "react";
 import GameStatus from "./singlePlayer/GameStatus";
 import Players from "./multiPlayer/Players";
+import useGameStore from "../gameStore";
 
-const Footer = ({
-  settings,
-  gameStatus,
-  setGameStatus,
-  playersData,
-}) => {
+const Footer = () => {
+  const settings = useGameStore((store) => store.settings);
+
   return (
     <div className="pt-8 md:pt-12 lg:pt-16">
-      {settings.selectedPlayers === 1 ? (
-        <GameStatus gameStatus={gameStatus} setGameStatus={setGameStatus} />
-      ) : (
-        <Players playersData={playersData} />
-      )}
+      {settings.selectedPlayers === 1 ? <GameStatus /> : <Players />}
     </div>
   );
 };

@@ -1,15 +1,19 @@
+import useGameStore from "@/components/gameStore";
 import React, { useEffect } from "react";
 
-const Time = ({ gameStatus, setGameStatus }) => {
+const Time = () => {
+  const gameStatus = useGameStore((store) => store.gameStatus);
+  const incTime = useGameStore((store) => store.incTime);
+
   useEffect(() => {
     let intervalId;
     if (gameStatus.isTimerRunning) {
       intervalId = setInterval(() => {
-        setGameStatus((prev) => ({ ...prev, time: prev.time + 1 }));
+        incTime();
       }, 1000);
     }
     return () => clearInterval(intervalId);
-  }, [gameStatus.isTimerRunning, setGameStatus]);
+  }, [gameStatus.isTimerRunning]);
 
   const minutes = Math.floor(gameStatus.time / 60);
   const seconds = gameStatus.time % 60;

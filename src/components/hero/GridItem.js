@@ -1,9 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import useGameStore from "../gameStore";
 
-const GridItem = ({ gridValue, handleRotation, index, gridSize, settings }) => {
+const GridItem = ({ gridValue, index }) => {
+  const rotate = useGameStore((store) => store.rotate);
+  const settings = useGameStore((store) => store.settings);
+  const grid = useGameStore((store) => store.grid);
+
   const itemSizeClass =
-    gridSize === 6
+    grid.gridSize === 6
       ? "w-[3.2rem] h-[3.2rem] md:w-[4.5rem] md:h-[4.5rem]"
       : "w-16 h-16 md:w-24 md:h-24";
 
@@ -12,7 +17,7 @@ const GridItem = ({ gridValue, handleRotation, index, gridSize, settings }) => {
       className={`relative ${itemSizeClass} rounded-full text-white overflow-hidden cursor-pointer shadow-2xl transition-all duration-300 ${
         gridValue.status ? "[transform:rotateY(180deg)]" : ""
       }`}
-      onClick={() => handleRotation(index)}
+      onClick={() => rotate(index)}
     >
       <div
         className={`absolute inset-0 w-full h-full flex justify-center items-center bg-[#152937] hover:bg-[#6393b6] transition-all duration-100 z-20 ${

@@ -2,14 +2,11 @@ import React from "react";
 import Time from "./Time";
 import Moves from "./Moves";
 
-const GameStatus = ({
-  gameStatus,
-  setGameStatus,
-}) => {
+const GameStatus = () => {
   return (
     <div className="flex flex-row justify-center gap-6">
-      <Time gameStatus={gameStatus} setGameStatus={setGameStatus} />
-      <Moves gameStatus={gameStatus} />
+      <Time />
+      <Moves />
     </div>
   );
 };

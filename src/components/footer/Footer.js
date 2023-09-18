@@ -1,7 +1,9 @@
 import React from "react";
+
 import GameStatus from "./singlePlayer/GameStatus";
 import Players from "./multiPlayer/Players";
-import useGameStore from "../gameStore";
+
+import useGameStore from "@/store/gameStore";
 
 const Footer = () => {
   const settings = useGameStore((store) => store.settings);

@@ -1,11 +1,12 @@
 import React from "react";
 import Card from "./Card";
-import useGameStore from "../gameStore";
+import useGameStore from "../../store/gameStore";
 
 const GameEnd = () => {
   const playersData = useGameStore((store) => store.playersData);
   const gameStatus = useGameStore((store) => store.gameStatus);
   const settings = useGameStore((store) => store.settings);
+  const isGameEnd = useGameStore((store) => store.isGameEnd);
 
   playersData.players.sort((a, b) => b.score - a.score);
   const maxScore = Math.max(
@@ -55,10 +56,8 @@ const GameEnd = () => {
         };
 
   return (
-    <div>
-      <Card
-        details={playersDetails}
-      />
+    <div className={`${isGameEnd ? "block" : "hidden"}`}>
+      <Card details={playersDetails} />
     </div>
   );
 };

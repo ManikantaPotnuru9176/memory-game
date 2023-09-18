@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+
 import Button from "./Button";
-import useGameStore from "../gameStore";
+
+import useGameStore from "@/store/gameStore";
 
 const Navbar = () => {
   const settings = useGameStore((store) => store.settings);

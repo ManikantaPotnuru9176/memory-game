@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from "react";
+
 import FormField from "./FormField";
-import useGameStore from "../gameStore";
+
+import useGameStore from "@/store/gameStore";
 
 const NewGame = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
   const settings = useGameStore((store) => store.settings);
   const changeOptions = useGameStore((store) => store.changeOptions);
   const changeSettingsStatus = useGameStore(
     (store) => store.changeSettingsStatus
   );
   const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-  }, []);
 
   const options = {
     themeOptions: ["Numbers", "Icons"],
@@ -27,10 +21,8 @@ const NewGame = () => {
   return (
     <div
       className={`${
-        settings.status ? "block" : "hidden"
-      } z-50 fixed inset-0 bg-[#142838] transform transition-transform ease-in-out duration-500 ${
-        isVisible ? "translate-x-0" : "-translate-x-full"
-      }`}
+        settings.status ? "translate-x-0" : "-translate-x-full"
+      } z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform`}
     >
       <div
         className="px-6 mt-20"

@@ -1,6 +1,8 @@
 import React from "react";
+
 import Player from "./Player";
-import useGameStore from "@/components/gameStore";
+
+import useGameStore from "@/store/gameStore";
 
 const Players = () => {
   const playersData = useGameStore((store) => store.playersData);

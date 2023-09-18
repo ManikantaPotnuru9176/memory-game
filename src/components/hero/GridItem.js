@@ -1,6 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import useGameStore from "../gameStore";
+
+import useGameStore from "@/store/gameStore";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const GridItem = ({ gridValue, index }) => {
   const rotate = useGameStore((store) => store.rotate);

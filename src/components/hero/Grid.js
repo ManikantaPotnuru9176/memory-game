@@ -1,6 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
+
 import GridItem from "./GridItem";
-import useGameStore from "../gameStore";
+
+import useGameStore from "@/store/gameStore";
 
 const Grid = () => {
   const grid = useGameStore((store) => store.grid);

@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
+
 import FormField from "./FormField";
 
-const NewGame = ({ settings, setSettings, shuffleGridValues }) => {
-  const [isVisible, setIsVisible] = useState(false);
+import useGameStore from "@/store/gameStore";
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-  }, []);
-
-  const handleOptionChange = (key, value) => {
-    setSettings((prev) => ({ ...prev, [key]: value }));
-  };
+const NewGame = () => {
+  const settings = useGameStore((store) => store.settings);
+  const changeOptions = useGameStore((store) => store.changeOptions);
+  const changeSettingsStatus = useGameStore(
+    (store) => store.changeSettingsStatus
+  );
+  const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
 
   const options = {
     themeOptions: ["Numbers", "Icons"],
@@ -23,10 +21,8 @@ const NewGame = ({ settings, setSettings, shuffleGridValues }) => {
   return (
     <div
       className={`${
-        settings.status ? "block" : "hidden"
-      } z-50 fixed inset-0 bg-[#142838] transform transition-transform ease-in-out duration-500 ${
-        isVisible ? "translate-x-0" : "-translate-x-full"
-      }`}
+        settings.status ? "translate-x-0" : "-translate-x-full"
+      } z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform`}
     >
       <div
         className="px-6 mt-20"
@@ -43,28 +39,26 @@ const NewGame = ({ settings, setSettings, shuffleGridValues }) => {
               legend="Select Theme"
               options={options.themeOptions}
               selectedValue={settings.selectedTheme}
-              onChange={(theme) => handleOptionChange("selectedTheme", theme)}
+              onChange={(theme) => changeOptions("selectedTheme", theme)}
             />
             <FormField
               legend="Numbers of Players"
               options={options.playerOptions}
               selectedValue={settings.selectedPlayers}
-              onChange={(players) =>
-                handleOptionChange("selectedPlayers", players)
-              }
+              onChange={(players) => changeOptions("selectedPlayers", players)}
             />
             <FormField
               legend="Grid Size"
               options={options.gridSizeOptions}
               selectedValue={settings.selectedGridSize}
-              onChange={(size) => handleOptionChange("selectedGridSize", size)}
+              onChange={(size) => changeOptions("selectedGridSize", size)}
             />
             <div className="pt-2">
               <button
                 className="w-full text-4.125 md:text-3xl font-extrabold bg-[#fca417] hover:bg-[#fcba4f] focus-visible:bg-yellow-900 text-white leading-[2.7] md:leading-[2.187] rounded-full"
                 onClick={(e) => {
                   e.preventDefault();
-                  setSettings((prev) => ({ ...prev, status: false }));
+                  changeSettingsStatus();
                   shuffleGridValues();
                 }}
               >

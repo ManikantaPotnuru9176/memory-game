@@ -1,35 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+
 import Button from "./Button";
 
-const Navbar = ({
-  settings,
-  setSettings,
-  handleRestart,
-  setGameStatus,
-  gameStatus,
-}) => {
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [pausePlay, setPausePlay] = useState("Start Game");
+import useGameStore from "@/store/gameStore";
+
+const Navbar = () => {
+  const settings = useGameStore((store) => store.settings);
+  const pausePlay = useGameStore((store) => store.pausePlay);
+  const setPausePlay = useGameStore((store) => store.setPausePlay);
+  const toggleTimer = useGameStore((store) => store.toggleTimer);
+  const isMobileMenuOpen = useGameStore((store) => store.isMobileMenuOpen);
+  const toggleMobileMenu = useGameStore((store) => store.toggleMobileMenu);
+  const gameStatus = useGameStore((store) => store.gameStatus);
+  const restartGame = useGameStore((store) => store.restartGame);
+  const changeSettingsStatus = useGameStore(
+    (store) => store.changeSettingsStatus
+  );
+  const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
 
   useEffect(() => {
     if (!gameStatus.isTimerRunning && pausePlay === "Start Game") return;
     setPausePlay(gameStatus.isTimerRunning ? "Pause Game" : "Resume Game");
   }, [gameStatus.isTimerRunning]);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!isMobileMenuOpen);
-  };
-
   const shouldRenderPausePlayButton = settings.selectedPlayers === 1;
 
   const handlePausePlay = () => {
-    setGameStatus((prevGameStatus) => ({
-      ...prevGameStatus,
-      isTimerRunning: !prevGameStatus.isTimerRunning,
-    }));
-
-    setPausePlay((prev) =>
-      prev === "Start Game" || prev === "Resume Game"
+    toggleTimer();
+    setPausePlay(
+      pausePlay === "Start Game" || pausePlay === "Resume Game"
         ? "Pause Game"
         : "Resume Game"
     );
@@ -56,16 +55,16 @@ const Navbar = ({
                 text="Restart"
                 primary
                 onClick={() => {
-                  setPausePlay("Start Game");
-                  handleRestart();
+                  restartGame();
+                  shuffleGridValues();
                 }}
               />
               <Button
                 text="New Game"
                 onClick={() => {
                   setPausePlay("Start Game");
-                  handleRestart();
-                  setSettings((prev) => ({ ...prev, status: true }));
+                  restartGame();
+                  changeSettingsStatus();
                 }}
               />
               {shouldRenderPausePlayButton && (
@@ -90,8 +89,7 @@ const Navbar = ({
             <Button
               text="Restart"
               onClick={() => {
-                setPausePlay("Start Game");
-                handleRestart();
+                restartGame();
                 toggleMobileMenu();
               }}
               primary
@@ -100,8 +98,8 @@ const Navbar = ({
               text="New Game"
               onClick={() => {
                 setPausePlay("Start Game");
-                setSettings((prev) => ({ ...prev, status: true }));
-                handleRestart();
+                restartGame();
+                changeSettingsStatus();
                 toggleMobileMenu();
               }}
             />

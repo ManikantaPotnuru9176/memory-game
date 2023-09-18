@@ -1,7 +1,27 @@
 import React from "react";
+import useGameStore from "../../store/gameStore";
 
-const Card = ({ details, setSettings, handleRestart }) => {
+const Card = ({ details }) => {
   const { title, subtitle, data } = details;
+  const changeSettingsStatus = useGameStore(
+    (store) => store.changeSettingsStatus
+  );
+  const restartGame = useGameStore((store) => store.restartGame);
+  const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
+  const toggleGameEnd = useGameStore((store) => store.toggleGameEnd);
+
+  const handleRestart = () => {
+    restartGame();
+    shuffleGridValues();
+    toggleGameEnd();
+  };
+
+  const handleNewGame = () => {
+    restartGame();
+    shuffleGridValues();
+    changeSettingsStatus();
+    toggleGameEnd();
+  };  
 
   return (
     <div
@@ -54,13 +74,7 @@ const Card = ({ details, setSettings, handleRestart }) => {
           </button>
           <button
             className="basis-full text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#dfe7ec] hover:bg-[#6393b6] text-[#32485a] hover:text-white"
-            onClick={() => {
-              handleRestart();
-              setSettings((prevSettings) => ({
-                ...prevSettings,
-                status: true,
-              }));
-            }}
+            onClick={() => handleNewGame()}
           >
             Setup New Game
           </button>

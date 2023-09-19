@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 
-import Navbar from "@/components/navbar/Navbar";
-import Grid from "@/components/hero/Grid";
-import Footer from "@/components/footer/Footer";
-import NewGame from "@/components/gameSetup/NewGame";
-import GameEnd from "@/components/gameEnd/GameEnd";
-
 import useGameStore from "@/store/gameStore";
+import NewGame from "./gameSetup/NewGame";
+import Navbar from "./navbar/Navbar";
+import Grid from "./hero/Grid";
+import Footer from "./footer/Footer";
+import GameEnd from "./gameEnd/GameEnd";
 
 const Main = () => {
   const settings = useGameStore((store) => store.settings);

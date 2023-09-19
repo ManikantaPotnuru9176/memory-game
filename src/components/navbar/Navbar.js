@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import Button from "./Button";
 
 import useGameStore from "@/store/gameStore";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const settings = useGameStore((store) => store.settings);
@@ -17,6 +18,8 @@ const Navbar = () => {
     (store) => store.changeSettingsStatus
   );
   const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!gameStatus.isTimerRunning && pausePlay === "Start Game") return;
@@ -99,6 +102,7 @@ const Navbar = () => {
               onClick={() => {
                 setPausePlay("Start Game");
                 restartGame();
+                // router.push("/newgame");
                 changeSettingsStatus();
                 toggleMobileMenu();
               }}

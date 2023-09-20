@@ -9,13 +9,19 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "./config/firebaseConfig";
 import { useRouter } from "next/router";
+import useAuthStore from "@/store/authStore";
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const email = useAuthStore((store) => store.email);
+  const setEmail = useAuthStore((store) => store.setEmail);
+  const password = useAuthStore((store) => store.password);
+  const setPassword = useAuthStore((store) => store.setPassword);
+  const showPassword = useAuthStore((store) => store.showPassword);
+  const setShowPassword = useAuthStore((store) => store.setShowPassword);
 
-  const router = useRouter()
+  const setUser = useAuthStore((store) => store.setUser);
+
+  const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -25,8 +31,11 @@ const SignIn = () => {
     e.preventDefault();
     setEmail("");
     setPassword("");
+    setShowPassword(false);
     try {
-      signInWithEmailAndPassword(auth, email, password);
+      const user = await signInWithEmailAndPassword(auth, email, password);
+      setUser(user);
+      localStorage.setItem("user", JSON.stringify(user));
       router.push("/game/game");
     } catch (error) {
       console.log("Error: ", error.message);

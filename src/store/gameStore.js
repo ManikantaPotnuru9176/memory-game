@@ -25,7 +25,7 @@ const useGameStore = create((set) => {
 
   const initialState = {
     settings: {
-      status: false,
+      status: true,
       selectedTheme: "Numbers",
       selectedPlayers: 1,
       selectedGridSize: `${initialGridSize}x${initialGridSize}`,

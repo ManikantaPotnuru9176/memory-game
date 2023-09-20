@@ -1,15 +1,13 @@
-import useAuthStore from "@/store/authStore";
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 
 const Loading = () => {
-  const user = useAuthStore((store) => store.user);
+  // const user = useAuthStore((store) => store.user);
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
-    if (!user) router.push("/auth/signin");
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) router.push("/auth/signin");
+  // }, []);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#142838]">
@@ -30,7 +28,6 @@ const Loading = () => {
             fill="currentFill"
           />
         </svg>
-        <span className="sr-only">Loading...</span>
       </div>
     </div>
   );

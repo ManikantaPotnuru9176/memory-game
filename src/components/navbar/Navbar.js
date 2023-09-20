@@ -4,6 +4,9 @@ import Button from "./Button";
 
 import useGameStore from "@/store/gameStore";
 import { useRouter } from "next/router";
+import { signOut } from "firebase/auth";
+import { auth } from "../auth/config/firebaseConfig";
+import useAuthStore from "@/store/authStore";
 
 const Navbar = () => {
   const settings = useGameStore((store) => store.settings);
@@ -18,6 +21,8 @@ const Navbar = () => {
     (store) => store.changeSettingsStatus
   );
   const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
+
+  const setUser = useAuthStore((store) => store.setUser);
 
   const router = useRouter();
 
@@ -35,6 +40,17 @@ const Navbar = () => {
         ? "Pause Game"
         : "Resume Game"
     );
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const res = await signOut(auth);
+      setUser(null);
+      localStorage.setItem("user", JSON.stringify(null));
+      router.push("/auth/signin");
+    } catch (error) {
+      console.log("Error: ", error.message);
+    }
   };
 
   return (
@@ -68,11 +84,13 @@ const Navbar = () => {
                   setPausePlay("Start Game");
                   restartGame();
                   changeSettingsStatus();
+                  router.push("/game/newgame");
                 }}
               />
               {shouldRenderPausePlayButton && (
                 <Button text={pausePlay} onClick={handlePausePlay} />
               )}
+              <Button text="Sign out" onClick={() => handleSignOut()} />
             </div>
           </nav>
         </div>
@@ -102,9 +120,9 @@ const Navbar = () => {
               onClick={() => {
                 setPausePlay("Start Game");
                 restartGame();
-                // router.push("/newgame");
                 changeSettingsStatus();
                 toggleMobileMenu();
+                router.push("/game/newgame");
               }}
             />
             {shouldRenderPausePlayButton && (

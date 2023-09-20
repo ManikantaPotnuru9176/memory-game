@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect } from "react";
 
 import FormField from "./FormField";
 
 import useGameStore from "@/store/gameStore";
+import { useRouter } from "next/router";
+import useAuthStore from "@/store/authStore";
 
 const NewGame = () => {
   const settings = useGameStore((store) => store.settings);
@@ -11,6 +13,16 @@ const NewGame = () => {
     (store) => store.changeSettingsStatus
   );
   const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
+
+  const user = useAuthStore((store) => store.user);
+  const setUser = useAuthStore((store) => store.setUser);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUser(user);
+  }, []);
 
   const options = {
     themeOptions: ["Numbers", "Icons"],
@@ -60,6 +72,9 @@ const NewGame = () => {
                   e.preventDefault();
                   changeSettingsStatus();
                   shuffleGridValues();
+                  user
+                    ? router.push("/game/game")
+                    : router.push("/auth/signin");
                 }}
               >
                 Start Game

@@ -9,12 +9,17 @@ import { auth } from "./config/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import useAuthStore from "@/store/authStore";
 
 const SignUp = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const email = useAuthStore((store) => store.email);
+  const setEmail = useAuthStore((store) => store.setEmail);
+  const password = useAuthStore((store) => store.password);
+  const setPassword = useAuthStore((store) => store.setPassword);
+  const confirmPassword = useAuthStore((store) => store.confirmPassword);
+  const setConfirmPassword = useAuthStore((store) => store.setConfirmPassword);
+  const showPassword = useAuthStore((store) => store.showPassword);
+  const setShowPassword = useAuthStore((store) => store.setShowPassword);
 
   const router = useRouter();
 
@@ -23,8 +28,11 @@ const SignUp = () => {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
+    setShowPassword(false);
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
+      setUser(user);
+      localStorage.setItem("user", JSON.stringify(user));
       router.push("/game/game");
     } catch (error) {
       console.log("Error: ", error.message);

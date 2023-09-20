@@ -1,29 +1,17 @@
 import { useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 import useAuthStore from "@/store/authStore";
-import { auth } from "@/components/auth/config/firebaseConfig";
 
 export default function Home() {
-  const { user, isLoading, setUser, setIsLoading } = useAuthStore();
+  const user = useAuthStore((store) => store.user);
+  const setUser = useAuthStore((store) => store.setUser);
+
   const router = useRouter();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-        setIsLoading(false);
-      }
-    });
+    router.push("/game/newgame");
+    setUser(JSON.parse(localStorage.getItem("user")));
   }, []);
-
-  useEffect(() => {
-    isLoading
-      ? router.push("/game/loading")
-      : user
-      ? router.push("/game/game")
-      : router.push("/auth/signin");
-  }, [isLoading, user]);
 
   return null;
 }

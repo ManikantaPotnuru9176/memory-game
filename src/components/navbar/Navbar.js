@@ -120,6 +120,7 @@ const Navbar = () => {
               onClick={() => {
                 setPausePlay("Start Game");
                 restartGame();
+                // router.push("/newgame");
                 changeSettingsStatus();
                 toggleMobileMenu();
                 router.push("/game/newgame");

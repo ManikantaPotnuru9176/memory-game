@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 
 import useGameStore from "@/store/gameStore";
-import NewGame from "./gameSetup/NewGame";
 import Navbar from "./navbar/Navbar";
 import Grid from "./hero/Grid";
 import Footer from "./footer/Footer";

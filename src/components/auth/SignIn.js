@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
   faEnvelope,
   faEye,
@@ -6,10 +7,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
 import { auth } from "./config/firebaseConfig";
 import { useRouter } from "next/router";
 import useAuthStore from "@/store/authStore";
+import toast, { Toaster } from "react-hot-toast";
 
 const SignIn = () => {
   const email = useAuthStore((store) => store.email);
@@ -23,6 +24,12 @@ const SignIn = () => {
 
   const router = useRouter();
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUser(user);
+    if (user) router.push("/game/newgame");
+  }, []);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -34,10 +41,18 @@ const SignIn = () => {
     setShowPassword(false);
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
+      toast.success("Successfully Signed in", {
+        duration: 3000,
+        position: "top-right",
+      });
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
       router.push("/game/game");
     } catch (error) {
+      toast.error("Invalid email or password. Please try again.", {
+        duration: 3000,
+        position: "top-right",
+      });
       console.log("Error: ", error.message);
     }
   };
@@ -47,6 +62,7 @@ const SignIn = () => {
       id="signIn"
       className={`z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform translate-x-0`}
     >
+      <Toaster />
       <div
         className="px-6 mt-6"
         role="dialog"
@@ -141,14 +157,13 @@ const SignIn = () => {
             <button
               type="submit"
               className="w-full text-sm md:text-2xl text-center bg-[#fca417] hover:bg-[#fcba4f] text-white font-medium rounded-lg px-5 py-2.5"
-              onClick={(e) => signIn(e)}
             >
               Sign in
             </button>
             <p className="text-sm font-light text-[#152836]">
               Don’t have an account yet?{" "}
               <a
-                className="font-medium text-[#142838] hover:underline"
+                className="font-medium text-[#142838] hover:underline cursor-pointer"
                 onClick={() => router.push("/auth/signup")}
               >
                 Sign up here

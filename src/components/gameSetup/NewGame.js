@@ -36,6 +36,14 @@ const NewGame = () => {
         settings.status ? "translate-x-0" : "-translate-x-full"
       } z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform`}
     >
+      <div className="absolute right-12 top-4 gap-2 flex space-x-4">
+        <button className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#fca516] hover:bg-[#fcba4f] text-white">
+          Sign in
+        </button>
+        <button className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#dfe7ec] hover:bg-[#6393b6] text-[#32485a] hover:text-white">
+          Sign up
+        </button>
+      </div>
       <div
         className="px-6 mt-20"
         role="dialog"

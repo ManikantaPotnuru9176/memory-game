@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
 import { auth } from "../auth/config/firebaseConfig";
 import useAuthStore from "@/store/authStore";
+import toast, { Toaster } from "react-hot-toast";
 
 const Navbar = () => {
   const settings = useGameStore((store) => store.settings);
@@ -42,13 +43,33 @@ const Navbar = () => {
     );
   };
 
+  const handleRestart = () => {
+    restartGame();
+    shuffleGridValues();
+  };
+
+  const handleNewGame = () => {
+    setPausePlay("Start Game");
+    restartGame();
+    changeSettingsStatus();
+    router.push("/game/newgame");
+  };
+
   const handleSignOut = async () => {
     try {
-      const res = await signOut(auth);
+      await signOut(auth);
+      toast.success("Successfully Signed out", {
+        duration: 3000,
+        position: "top-right",
+      });
       setUser(null);
       localStorage.setItem("user", JSON.stringify(null));
       router.push("/auth/signin");
     } catch (error) {
+      toast.error("Error occured. Please try again.", {
+        duration: 3000,
+        position: "top-right",
+      });
       console.log("Error: ", error.message);
     }
   };
@@ -56,6 +77,7 @@ const Navbar = () => {
   return (
     <>
       <div className="mb-8 px-4 md:px-16 lg:px-12 pt-4 md:pt-6 pb-6 md:pb-0">
+        <Toaster />
         <div className="flex flex-row justify-between items-center">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#152836]">
             Memory Game
@@ -70,23 +92,8 @@ const Navbar = () => {
               </button>
             </div>
             <div className="hidden md:flex md:gap-2 lg:gap-4">
-              <Button
-                text="Restart"
-                primary
-                onClick={() => {
-                  restartGame();
-                  shuffleGridValues();
-                }}
-              />
-              <Button
-                text="New Game"
-                onClick={() => {
-                  setPausePlay("Start Game");
-                  restartGame();
-                  changeSettingsStatus();
-                  router.push("/game/newgame");
-                }}
-              />
+              <Button text="Restart" primary onClick={() => handleRestart()} />
+              <Button text="New Game" onClick={() => handleNewGame()} />
               {shouldRenderPausePlayButton && (
                 <Button text={pausePlay} onClick={handlePausePlay} />
               )}
@@ -110,7 +117,7 @@ const Navbar = () => {
             <Button
               text="Restart"
               onClick={() => {
-                restartGame();
+                handleRestart();
                 toggleMobileMenu();
               }}
               primary
@@ -118,11 +125,8 @@ const Navbar = () => {
             <Button
               text="New Game"
               onClick={() => {
-                setPausePlay("Start Game");
-                restartGame();
-                changeSettingsStatus();
+                handleNewGame();
                 toggleMobileMenu();
-                router.push("/game/newgame");
               }}
             />
             {shouldRenderPausePlayButton && (
@@ -134,6 +138,7 @@ const Navbar = () => {
                 }}
               />
             )}
+            <Button text="Sign out" onClick={() => handleSignOut()} />
           </div>
         </div>
       )}

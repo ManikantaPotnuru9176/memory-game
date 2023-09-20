@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
   faEnvelope,
   faEye,
@@ -7,9 +8,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { auth } from "./config/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
 import { useRouter } from "next/router";
 import useAuthStore from "@/store/authStore";
+import toast, { Toaster } from "react-hot-toast";
 
 const SignUp = () => {
   const email = useAuthStore((store) => store.email);
@@ -20,21 +21,48 @@ const SignUp = () => {
   const setConfirmPassword = useAuthStore((store) => store.setConfirmPassword);
   const showPassword = useAuthStore((store) => store.showPassword);
   const setShowPassword = useAuthStore((store) => store.setShowPassword);
+  const errorPassword = useAuthStore((store) => store.errorPassword);
+  const setErrorPassword = useAuthStore((store) => store.setErrorPassword);
+  const handleMatch = useAuthStore((store) => store.handleMatch);
+
+  const setUser = useAuthStore((store) => store.setUser);
 
   const router = useRouter();
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUser(user);
+    if (user) router.push("/game/newgame");
+  }, []);
+
   const signUp = async (e) => {
     e.preventDefault();
+    console.log("error: ", errorPassword);
+    if (errorPassword[0] || errorPassword[1]) {
+      toast.error("Check your entered passwords.", {
+        duration: 3000,
+        position: "top-right",
+      });
+      return;
+    }
     setEmail("");
     setPassword("");
     setConfirmPassword("");
     setShowPassword(false);
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
+      toast.success("Successfully Signed up", {
+        duration: 3000,
+        position: "top-right",
+      });
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
       router.push("/game/game");
     } catch (error) {
+      toast.error("Invalid email or password. Please try again.", {
+        duration: 3000,
+        position: "top-right",
+      });
       console.log("Error: ", error.message);
     }
   };
@@ -44,6 +72,7 @@ const SignUp = () => {
       id="signIn"
       className={`z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform translate-x-0`}
     >
+      <Toaster />
       <div
         className="px-6 mt-6"
         role="dialog"
@@ -96,9 +125,20 @@ const SignUp = () => {
                 name="password"
                 id="password"
                 placeholder="••••••••"
-                className="bg-[#dee7ed] border border-[#7b9fb7] text-gray sm:text-sm rounded-lg focus:border-[#152836] block w-full py-2 md:py-4 mt-2 pl-10"
+                className={`bg-[#dee7ed] ${
+                  errorPassword[0] || errorPassword[1]
+                    ? "border-2 border-red-500"
+                    : "border border-[#7b9fb7]"
+                } text-gray sm:text-sm rounded-lg block w-full py-2 md:py-4 mt-2 pl-10`}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  const pass = e.target.value;
+                  setPassword(pass);
+                  pass.length < 6
+                    ? setErrorPassword([true, errorPassword[1]])
+                    : setErrorPassword([false, false]);
+                  handleMatch();
+                }}
                 required
               />
               {password && (
@@ -115,6 +155,16 @@ const SignUp = () => {
                 </button>
               )}
             </div>
+            {errorPassword[0] && (
+              <span className="flex items-center font-medium tracking-wide text-red-500 text-xs -mt-4 ml-1">
+                Password should be at least 6 characters long !
+              </span>
+            )}
+            {errorPassword[1] && (
+              <span className="flex items-center font-medium tracking-wide text-red-500 text-xs -mt-4 ml-1">
+                Passwords doesn't match !
+              </span>
+            )}
             <div className="relative">
               <FontAwesomeIcon
                 icon={faKey}
@@ -131,9 +181,16 @@ const SignUp = () => {
                 name="confirmPassword"
                 id="confirmPassword"
                 placeholder="••••••••"
-                className="bg-[#dee7ed] border border-[#7b9fb7] text-gray sm:text-sm rounded-lg focus:border-[#152836] block w-full py-2 md:py-4 mt-2 pl-10"
+                className={`bg-[#dee7ed] border border-[#7b9fb7] ${
+                  errorPassword[1]
+                    ? "border-2 border-red-500"
+                    : "border border-[#7b9fb7]"
+                } text-gray sm:text-sm rounded-lg focus:border-[#152836] block w-full py-2 md:py-4 mt-2 pl-10`}
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  handleMatch();
+                }}
                 required
               />
               {confirmPassword && (
@@ -150,6 +207,11 @@ const SignUp = () => {
                 </button>
               )}
             </div>
+            {errorPassword[1] && (
+              <span className="flex items-center font-medium tracking-wide text-red-500 text-xs -mt-4 ml-1">
+                Passwords doesn't match !
+              </span>
+            )}
             <div className="flex items-center justify-between">
               <div className="flex items-start">
                 <div className="flex items-center h-5">
@@ -170,14 +232,13 @@ const SignUp = () => {
             <button
               type="submit"
               className="w-full text-sm md:text-2xl text-center bg-[#fca417] hover:bg-[#fcba4f] text-white font-medium rounded-lg px-5 py-2.5"
-              onClick={(e) => signUp(e)}
             >
               Sign up
             </button>
             <p className="text-sm font-light text-[#152836]">
               Already have an account?{" "}
               <a
-                className="font-medium text-[#142838] hover:underline"
+                className="font-medium text-[#142838] hover:underline cursor-pointer"
                 onClick={() => router.push("/auth/signin")}
               >
                 Sign in here

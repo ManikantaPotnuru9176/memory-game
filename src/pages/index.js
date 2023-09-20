@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import useAuthStore from "@/store/authStore";
 
 export default function Home() {
-  const user = useAuthStore((store) => store.user);
   const setUser = useAuthStore((store) => store.setUser);
 
   const router = useRouter();

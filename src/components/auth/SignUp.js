@@ -48,7 +48,7 @@ const SignUp = () => {
     if (errorPassword[0] || errorPassword[1]) {
       toast.error("Check your entered passwords.", {
         duration: 3000,
-        position: "top-right",
+        position: "bottom-right",
       });
       return;
     }
@@ -62,15 +62,15 @@ const SignUp = () => {
       const user = await createUserWithEmailAndPassword(auth, email, password);
       toast.success("Successfully Signed up", {
         duration: 3000,
-        position: "top-right",
+        position: "bottom-right",
       });
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
-      router.push("/game/game");
+      router.push("/game/newgame");
     } catch (error) {
       toast.error("Invalid email or password. Please try again.", {
         duration: 3000,
-        position: "top-right",
+        position: "bottom-right",
       });
       console.log("Error: ", error.message);
     }

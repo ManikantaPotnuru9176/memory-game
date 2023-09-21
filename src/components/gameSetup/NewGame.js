@@ -5,6 +5,9 @@ import FormField from "./FormField";
 import useGameStore from "@/store/gameStore";
 import { useRouter } from "next/router";
 import useAuthStore from "@/store/authStore";
+import toast, { Toaster } from "react-hot-toast";
+import { signOut } from "firebase/auth";
+import { auth } from "../auth/config/firebaseConfig";
 
 const NewGame = () => {
   const settings = useGameStore((store) => store.settings);
@@ -30,25 +33,56 @@ const NewGame = () => {
     gridSizeOptions: ["4x4", "6x6"],
   };
 
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      toast.success("Successfully Signed out", {
+        duration: 3000,
+        position: "top-left",
+      });
+      setUser(null);
+      localStorage.setItem("user", JSON.stringify(null));
+      router.push("/game/newgame");
+    } catch (error) {
+      toast.error("Error occured. Please try again.", {
+        duration: 3000,
+        position: "bottom-right",
+      });
+      console.log("Error: ", error.message);
+    }
+  };
+
   return (
     <div
       className={`${
         settings.status ? "translate-x-0" : "-translate-x-full"
       } z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform`}
     >
+      <Toaster />
       <div className="absolute right-12 top-4 gap-2 flex space-x-4">
-        <button
-          className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#fca516] hover:bg-[#fcba4f] text-white"
-          onClick={() => router.push("/auth/signin")}
-        >
-          Sign in
-        </button>
-        <button
-          className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#dfe7ec] hover:bg-[#6393b6] text-[#32485a] hover:text-white"
-          onClick={() => router.push("/auth/signup")}
-        >
-          Sign up
-        </button>
+        {user ? (
+          <button
+            className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#fca516] hover:bg-[#fcba4f] text-white"
+            onClick={() => handleSignOut()}
+          >
+            Sign out
+          </button>
+        ) : (
+          <>
+            <button
+              className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#fca516] hover:bg-[#fcba4f] text-white"
+              onClick={() => router.push("/auth/signin")}
+            >
+              Sign in
+            </button>
+            <button
+              className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#dfe7ec] hover:bg-[#6393b6] text-[#32485a] hover:text-white"
+              onClick={() => router.push("/auth/signup")}
+            >
+              Sign up
+            </button>
+          </>
+        )}
       </div>
       <div
         className="px-6 mt-20"

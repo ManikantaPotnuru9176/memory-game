@@ -60,15 +60,15 @@ const Navbar = () => {
       await signOut(auth);
       toast.success("Successfully Signed out", {
         duration: 3000,
-        position: "top-right",
+        position: "bottom-right",
       });
       setUser(null);
       localStorage.setItem("user", JSON.stringify(null));
-      router.push("/auth/signin");
+      router.push("/game/newgame");
     } catch (error) {
       toast.error("Error occured. Please try again.", {
         duration: 3000,
-        position: "top-right",
+        position: "bottom-right",
       });
       console.log("Error: ", error.message);
     }

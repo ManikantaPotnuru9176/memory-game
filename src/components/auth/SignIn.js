@@ -58,17 +58,17 @@ const SignIn = () => {
       const user = await signInWithEmailAndPassword(auth, email, password);
       toast.success("Successfully Signed in", {
         duration: 3000,
-        position: "top-right",
+        position: "bottom-right",
       });
       if (rememberMe)
         localStorage.setItem("rememberedEmail", JSON.stringify(email));
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
-      router.push("/game/game");
+      router.push("/game/newgame");
     } catch (error) {
       toast.error("Invalid email or password. Please try again.", {
         duration: 3000,
-        position: "top-right",
+        position: "bottom-right",
       });
       console.log("Error: ", error.message);
     }

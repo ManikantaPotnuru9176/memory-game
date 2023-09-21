@@ -19,6 +19,8 @@ const SignIn = () => {
   const setPassword = useAuthStore((store) => store.setPassword);
   const showPassword = useAuthStore((store) => store.showPassword);
   const setShowPassword = useAuthStore((store) => store.setShowPassword);
+  const rememberMe = useAuthStore((store) => store.rememberMe);
+  const setRememberMe = useAuthStore((store) => store.setRememberMe);
 
   const setUser = useAuthStore((store) => store.setUser);
 
@@ -28,10 +30,23 @@ const SignIn = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUser(user);
     if (user) router.push("/game/newgame");
+    else {
+      const rememberMeValue = JSON.parse(localStorage.getItem("rememberMe"));
+      if (rememberMeValue !== null) {
+        setRememberMe(rememberMeValue);
+        const storedEmail = JSON.parse(localStorage.getItem("rememberedEmail"));
+        if (storedEmail) setEmail(storedEmail);
+      }
+    }
   }, []);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleRememberMe = () => {
+    setRememberMe(!rememberMe);
+    localStorage.setItem("rememberMe", JSON.stringify(!rememberMe));
   };
 
   const signIn = async (e) => {
@@ -45,6 +60,8 @@ const SignIn = () => {
         duration: 3000,
         position: "top-right",
       });
+      if (rememberMe)
+        localStorage.setItem("rememberedEmail", JSON.stringify(email));
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
       router.push("/game/game");
@@ -142,6 +159,8 @@ const SignIn = () => {
                     aria-describedby="remember"
                     type="checkbox"
                     className="w-4 h-4 rounded accent-yellow-500 cursor-pointer"
+                    checked={rememberMe}
+                    onChange={handleRememberMe}
                   />
                 </div>
                 <div className="ml-3 text-sm">

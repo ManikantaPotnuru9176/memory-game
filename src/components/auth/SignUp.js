@@ -24,6 +24,8 @@ const SignUp = () => {
   const errorPassword = useAuthStore((store) => store.errorPassword);
   const setErrorPassword = useAuthStore((store) => store.setErrorPassword);
   const handleMatch = useAuthStore((store) => store.handleMatch);
+  const rememberMe = useAuthStore((store) => store.rememberMe);
+  const setRememberMe = useAuthStore((store) => store.setRememberMe);
 
   const setUser = useAuthStore((store) => store.setUser);
 
@@ -35,6 +37,11 @@ const SignUp = () => {
     if (user) router.push("/game/newgame");
   }, []);
 
+  const handleRememberMe = () => {
+    setRememberMe(!rememberMe);
+    localStorage.setItem("rememberMe", JSON.stringify(!rememberMe));
+  };
+
   const signUp = async (e) => {
     e.preventDefault();
     console.log("error: ", errorPassword);
@@ -45,6 +52,8 @@ const SignUp = () => {
       });
       return;
     }
+    if (rememberMe)
+      localStorage.setItem("rememberedEmail", JSON.stringify(email));
     setEmail("");
     setPassword("");
     setConfirmPassword("");
@@ -215,6 +224,8 @@ const SignUp = () => {
                     aria-describedby="remember"
                     type="checkbox"
                     className="w-4 h-4 rounded accent-yellow-500 cursor-pointer"
+                    checked={rememberMe}
+                    onChange={handleRememberMe}
                   />
                 </div>
                 <div className="ml-3 text-sm">

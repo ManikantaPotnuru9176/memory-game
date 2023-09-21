@@ -9,6 +9,7 @@ const useAuthStore = create((set) => ({
   showPassword: false,
   isPasswordMatch: false,
   errorPassword: [false, false],
+  rememberMe: false,
   setUser: (user) => set({ user }),
   setIsLoading: (isLoading) => set({ isLoading }),
   setEmail: (email) => set({ email }),
@@ -23,6 +24,7 @@ const useAuthStore = create((set) => ({
         ? { errorPassword: [state.errorPassword[0], false] }
         : { errorPassword: [state.errorPassword[0], true] };
     }),
+  setRememberMe: (rememberMe) => set({ rememberMe }),
 }));
 
 export default useAuthStore;

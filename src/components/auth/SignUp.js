@@ -126,7 +126,7 @@ const SignUp = () => {
                 id="password"
                 placeholder="••••••••"
                 className={`bg-[#dee7ed] ${
-                  errorPassword[0] || errorPassword[1]
+                  errorPassword[0]
                     ? "border-2 border-red-500"
                     : "border border-[#7b9fb7]"
                 } text-gray sm:text-sm rounded-lg block w-full py-2 md:py-4 mt-2 pl-10`}
@@ -158,11 +158,6 @@ const SignUp = () => {
             {errorPassword[0] && (
               <span className="flex items-center font-medium tracking-wide text-red-500 text-xs -mt-4 ml-1">
                 Password should be at least 6 characters long !
-              </span>
-            )}
-            {errorPassword[1] && (
-              <span className="flex items-center font-medium tracking-wide text-red-500 text-xs -mt-4 ml-1">
-                Passwords doesn't match !
               </span>
             )}
             <div className="relative">
@@ -209,7 +204,7 @@ const SignUp = () => {
             </div>
             {errorPassword[1] && (
               <span className="flex items-center font-medium tracking-wide text-red-500 text-xs -mt-4 ml-1">
-                Passwords doesn't match !
+                Password doesn't match !
               </span>
             )}
             <div className="flex items-center justify-between">

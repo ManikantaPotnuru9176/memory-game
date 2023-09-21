@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import useGameStore from "@/store/gameStore";
 import Navbar from "./navbar/Navbar";
@@ -9,6 +9,8 @@ import useAuthStore from "@/store/authStore";
 import { useRouter } from "next/router";
 
 const Main = () => {
+  const [show, setShow] = useState(false);
+
   const settings = useGameStore((store) => store.settings);
   const adjustGridSize = useGameStore((store) => store.adjustGridSize);
   const adjustPlayers = useGameStore((store) => store.adjustPlayers);
@@ -27,6 +29,7 @@ const Main = () => {
   }, [settings.selectedPlayers]);
 
   useEffect(() => {
+    setShow(true);
     const user = JSON.parse(localStorage.getItem("user"));
     setUser(user);
     if (!user) router.push("/auth/signin");
@@ -34,12 +37,16 @@ const Main = () => {
   }, []);
 
   return (
-    <>
+    <div
+      className={`transform ${
+        show ? "translate-x-0" : "translate-x-full"
+      } transition-transform ease-in-out duration-500`}
+    >
       <Navbar />
       <Grid />
       <Footer />
       <GameEnd />
-    </>
+    </div>
   );
 };
 

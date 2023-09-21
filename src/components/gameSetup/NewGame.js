@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import FormField from "./FormField";
 
@@ -10,6 +10,12 @@ import { signOut } from "firebase/auth";
 import { auth } from "../auth/config/firebaseConfig";
 
 const NewGame = () => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setShow(true);
+  }, []);
+
   const settings = useGameStore((store) => store.settings);
   const changeOptions = useGameStore((store) => store.changeOptions);
   const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
@@ -35,7 +41,7 @@ const NewGame = () => {
       await signOut(auth);
       toast.success("Successfully Signed out", {
         duration: 3000,
-        position: "top-left",
+        position: "bottom-right",
       });
       setUser(null);
       localStorage.setItem("user", JSON.stringify(null));
@@ -51,7 +57,9 @@ const NewGame = () => {
 
   return (
     <div
-      className={`translate-x-0 z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform`}
+      className={`fixed inset-0 bg-[#142838] transform ${
+        show ? "translate-x-0" : "translate-x-full"
+      } transition-transform ease-in-out duration-500`}
     >
       <Toaster />
       <div className="absolute right-1 md:right-12 top-2 md:top-4 flex space-x-1 md:space-x-4">

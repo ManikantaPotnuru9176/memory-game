@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   faEnvelope,
   faEye,
   faEyeSlash,
   faKey,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { auth } from "./config/firebaseConfig";
@@ -13,6 +14,12 @@ import useAuthStore from "@/store/authStore";
 import toast, { Toaster } from "react-hot-toast";
 
 const SignUp = () => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setShow(true);
+  }, []);
+
   const email = useAuthStore((store) => store.email);
   const setEmail = useAuthStore((store) => store.setEmail);
   const password = useAuthStore((store) => store.password);
@@ -26,8 +33,9 @@ const SignUp = () => {
   const handleMatch = useAuthStore((store) => store.handleMatch);
   const rememberMe = useAuthStore((store) => store.rememberMe);
   const setRememberMe = useAuthStore((store) => store.setRememberMe);
-
   const setUser = useAuthStore((store) => store.setUser);
+  const buttonLoading = useAuthStore((store) => store.buttonLoading);
+  const setButtonLoading = useAuthStore((store) => store.setButtonLoading);
 
   const router = useRouter();
 
@@ -44,12 +52,13 @@ const SignUp = () => {
 
   const signUp = async (e) => {
     e.preventDefault();
-    console.log("error: ", errorPassword);
+    setButtonLoading(true);
     if (errorPassword[0] || errorPassword[1]) {
       toast.error("Check your entered passwords.", {
         duration: 3000,
         position: "bottom-right",
       });
+      setButtonLoading(false);
       return;
     }
     if (rememberMe)
@@ -64,6 +73,7 @@ const SignUp = () => {
         duration: 3000,
         position: "bottom-right",
       });
+      setButtonLoading(false);
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
       router.push("/game/newgame");
@@ -72,14 +82,17 @@ const SignUp = () => {
         duration: 3000,
         position: "bottom-right",
       });
+      setButtonLoading(false);
       console.log("Error: ", error.message);
     }
   };
 
   return (
     <div
-      id="signIn"
-      className={`z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform translate-x-0`}
+      id="signUp"
+      className={`z-50 fixed inset-0 bg-[#142838] transform ${
+        show ? "translate-x-0" : "translate-x-full"
+      } transition-transform ease-in-out duration-500`}
     >
       <Toaster />
       <div
@@ -239,6 +252,12 @@ const SignUp = () => {
               type="submit"
               className="w-full text-sm md:text-2xl text-center bg-[#fca417] hover:bg-[#fcba4f] text-white font-medium rounded-lg px-5 py-2.5"
             >
+              {buttonLoading && (
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  className="animate-spin h-5 w-5 mr-3"
+                />
+              )}
               Sign up
             </button>
             <p className="text-sm font-light text-[#152836]">

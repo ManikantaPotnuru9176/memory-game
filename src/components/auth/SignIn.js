@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   faEnvelope,
   faEye,
   faEyeSlash,
   faKey,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -14,6 +15,13 @@ import toast, { Toaster } from "react-hot-toast";
 import useGameStore from "@/store/gameStore";
 
 const SignIn = () => {
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setShow(true);
+  }, []);
+
   const email = useAuthStore((store) => store.email);
   const setEmail = useAuthStore((store) => store.setEmail);
   const password = useAuthStore((store) => store.password);
@@ -22,8 +30,9 @@ const SignIn = () => {
   const setShowPassword = useAuthStore((store) => store.setShowPassword);
   const rememberMe = useAuthStore((store) => store.rememberMe);
   const setRememberMe = useAuthStore((store) => store.setRememberMe);
-
   const setUser = useAuthStore((store) => store.setUser);
+  const buttonLoading = useAuthStore((store) => store.buttonLoading);
+  const setButtonLoading = useAuthStore((store) => store.setButtonLoading);
 
   const router = useRouter();
 
@@ -55,12 +64,14 @@ const SignIn = () => {
     setEmail("");
     setPassword("");
     setShowPassword(false);
+    setButtonLoading(true);
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
       toast.success("Successfully Signed in", {
         duration: 3000,
         position: "bottom-right",
       });
+      setButtonLoading(false);
       if (rememberMe)
         localStorage.setItem("rememberedEmail", JSON.stringify(email));
       setUser(user);
@@ -71,6 +82,7 @@ const SignIn = () => {
         duration: 3000,
         position: "bottom-right",
       });
+      setButtonLoading(false);
       console.log("Error: ", error.message);
     }
   };
@@ -78,7 +90,9 @@ const SignIn = () => {
   return (
     <div
       id="signIn"
-      className={`z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform translate-x-0`}
+      className={`z-50 fixed inset-0 bg-[#142838] transform ${
+        show ? "translate-x-0" : "translate-x-full"
+      } transition-transform ease-in-out duration-500`}
     >
       <Toaster />
       <div
@@ -178,6 +192,12 @@ const SignIn = () => {
               type="submit"
               className="w-full text-sm md:text-2xl text-center bg-[#fca417] hover:bg-[#fcba4f] text-white font-medium rounded-lg px-5 py-2.5"
             >
+              {buttonLoading && (
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  className="animate-spin h-5 w-5 mr-3"
+                />
+              )}
               Sign in
             </button>
             <p className="text-sm font-light text-[#152836]">

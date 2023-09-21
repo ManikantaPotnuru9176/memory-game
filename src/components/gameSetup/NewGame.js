@@ -12,9 +12,6 @@ import { auth } from "../auth/config/firebaseConfig";
 const NewGame = () => {
   const settings = useGameStore((store) => store.settings);
   const changeOptions = useGameStore((store) => store.changeOptions);
-  const changeSettingsStatus = useGameStore(
-    (store) => store.changeSettingsStatus
-  );
   const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
 
   const user = useAuthStore((store) => store.user);
@@ -54,12 +51,10 @@ const NewGame = () => {
 
   return (
     <div
-      className={`${
-        settings.status ? "translate-x-0" : "-translate-x-full"
-      } z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform`}
+      className={`translate-x-0 z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform`}
     >
       <Toaster />
-      <div className="absolute right-12 top-4 gap-2 flex space-x-4">
+      <div className="absolute right-1 md:right-12 top-2 md:top-4 flex space-x-1 md:space-x-4">
         {user ? (
           <button
             className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#fca516] hover:bg-[#fcba4f] text-white"
@@ -118,7 +113,6 @@ const NewGame = () => {
                 className="w-full text-4.125 md:text-3xl font-extrabold bg-[#fca417] hover:bg-[#fcba4f] focus-visible:bg-yellow-900 text-white leading-[2.7] md:leading-[2.187] rounded-full"
                 onClick={(e) => {
                   e.preventDefault();
-                  changeSettingsStatus();
                   shuffleGridValues();
                   user
                     ? router.push("/game/game")

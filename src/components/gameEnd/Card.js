@@ -3,9 +3,6 @@ import useGameStore from "../../store/gameStore";
 
 const Card = ({ details }) => {
   const { title, subtitle, data } = details;
-  const changeSettingsStatus = useGameStore(
-    (store) => store.changeSettingsStatus
-  );
   const restartGame = useGameStore((store) => store.restartGame);
   const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
   const toggleGameEnd = useGameStore((store) => store.toggleGameEnd);
@@ -19,7 +16,6 @@ const Card = ({ details }) => {
   const handleNewGame = () => {
     restartGame();
     shuffleGridValues();
-    changeSettingsStatus();
     toggleGameEnd();
   };  
 

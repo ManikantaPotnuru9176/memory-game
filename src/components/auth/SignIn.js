@@ -11,6 +11,7 @@ import { auth } from "./config/firebaseConfig";
 import { useRouter } from "next/router";
 import useAuthStore from "@/store/authStore";
 import toast, { Toaster } from "react-hot-toast";
+import useGameStore from "@/store/gameStore";
 
 const SignIn = () => {
   const email = useAuthStore((store) => store.email);

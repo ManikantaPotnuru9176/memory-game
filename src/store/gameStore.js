@@ -25,7 +25,6 @@ const useGameStore = create((set) => {
 
   const initialState = {
     settings: {
-      status: true,
       selectedTheme: "Numbers",
       selectedPlayers: 1,
       selectedGridSize: `${initialGridSize}x${initialGridSize}`,
@@ -86,15 +85,6 @@ const useGameStore = create((set) => {
       }));
     },
 
-    changeSettingsStatus: () => {
-      set((state) => ({
-        settings: {
-          ...state.settings,
-          status: !state.settings.status,
-        },
-      }));
-    },
-
     setPausePlay: (value) => {
       set({ pausePlay: value });
     },
@@ -109,7 +99,7 @@ const useGameStore = create((set) => {
     },
 
     toggleMobileMenu: () => {
-      set((state) => ({ toggleMobileMenu: !state.toggleMobileMenu }));
+      set((state) => ({ isMobileMenuOpen: !state.isMobileMenuOpen }));
     },
 
     rotate: (index) => {

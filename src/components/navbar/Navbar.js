@@ -18,9 +18,6 @@ const Navbar = () => {
   const toggleMobileMenu = useGameStore((store) => store.toggleMobileMenu);
   const gameStatus = useGameStore((store) => store.gameStatus);
   const restartGame = useGameStore((store) => store.restartGame);
-  const changeSettingsStatus = useGameStore(
-    (store) => store.changeSettingsStatus
-  );
   const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
 
   const setUser = useAuthStore((store) => store.setUser);
@@ -51,8 +48,11 @@ const Navbar = () => {
   const handleNewGame = () => {
     setPausePlay("Start Game");
     restartGame();
-    changeSettingsStatus();
     router.push("/game/newgame");
+  };
+
+  const toggleMenu = () => {
+    toggleMobileMenu();
   };
 
   const handleSignOut = async () => {
@@ -85,7 +85,7 @@ const Navbar = () => {
           <nav className="mt-2 md:mt-0">
             <div className="md:hidden">
               <button
-                onClick={toggleMobileMenu}
+                onClick={toggleMenu}
                 className="bg-[#fca516] hover:bg-[#fcba4f] text-white text-md font-bold px-4 py-2 rounded-full"
               >
                 Menu

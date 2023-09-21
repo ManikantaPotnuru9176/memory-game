@@ -37,10 +37,16 @@ const NewGame = () => {
       } z-50 fixed inset-0 bg-[#142838] transition-transform ease-in-out duration-500 transform`}
     >
       <div className="absolute right-12 top-4 gap-2 flex space-x-4">
-        <button className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#fca516] hover:bg-[#fcba4f] text-white">
+        <button
+          className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#fca516] hover:bg-[#fcba4f] text-white"
+          onClick={() => router.push("/auth/signin")}
+        >
           Sign in
         </button>
-        <button className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#dfe7ec] hover:bg-[#6393b6] text-[#32485a] hover:text-white">
+        <button
+          className="text-lg md:text-xl font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-[#dfe7ec] hover:bg-[#6393b6] text-[#32485a] hover:text-white"
+          onClick={() => router.push("/auth/signup")}
+        >
           Sign up
         </button>
       </div>

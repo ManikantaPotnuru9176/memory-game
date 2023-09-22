@@ -12,6 +12,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
 import useAuthStore from "@/store/authStore";
 import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
@@ -50,6 +51,46 @@ const SignUp = () => {
     localStorage.setItem("rememberMe", JSON.stringify(!rememberMe));
   };
 
+  const createUserInHasura = async (id, email) => {
+    const admin_secret = process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET;
+    const url = process.env.NEXT_PUBLIC_HASURA_URL;
+    const query = `
+    mutation ($userId: String!, $userEmail: String!) {
+      insert_users(
+          objects: {userId: $userId, email: $userEmail},
+          on_conflict: {constraint: users_pkey, update_columns: [email]}
+      ) {
+          affected_rows
+          returning {
+              userId
+              email
+          }
+      }
+    }
+  `;
+    const variables = { userId: id, userEmail: email };
+
+    try {
+      const response = await axios.post(
+        url,
+        {
+          query,
+          variables,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-hasura-admin-secret": admin_secret,
+          },
+        }
+      );
+
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error creating user in Hasura:", error);
+    }
+  };
+
   const signUp = async (e) => {
     e.preventDefault();
     setButtonLoading(true);
@@ -73,10 +114,11 @@ const SignUp = () => {
         duration: 3000,
         position: "bottom-right",
       });
+      createUserInHasura(user.user.uid, user.user.email);
       setButtonLoading(false);
       setUser(user);
-      localStorage.setItem("user", JSON.stringify(user));
-      router.push("/game/newgame");
+      localStorage.setItem("user", JSON.stringify(user.user.uid));
+      router.push("/auth/signin");
     } catch (error) {
       toast.error("Invalid email or password. Please try again.", {
         duration: 3000,

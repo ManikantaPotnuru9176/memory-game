@@ -7,7 +7,7 @@ import {
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./config/firebaseConfig";
 import { useRouter } from "next/router";
 import useAuthStore from "@/store/authStore";
@@ -75,7 +75,9 @@ const SignIn = () => {
       if (rememberMe)
         localStorage.setItem("rememberedEmail", JSON.stringify(email));
       setUser(user);
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user.user.uid));
+      console.log("auth: ", auth);
+      console.log("getAuth: ", getAuth());
       router.push("/game/newgame");
     } catch (error) {
       toast.error("Invalid email or password. Please try again.", {

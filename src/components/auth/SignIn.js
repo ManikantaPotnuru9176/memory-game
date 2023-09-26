@@ -76,8 +76,8 @@ const SignIn = () => {
         localStorage.setItem("rememberedEmail", JSON.stringify(email));
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user.user.uid));
-      console.log("auth: ", auth);
-      console.log("getAuth: ", getAuth());
+      // console.log("auth: ", auth);
+      // console.log("getAuth: ", getAuth());
       router.push("/game/newgame");
     } catch (error) {
       toast.error("Invalid email or password. Please try again.", {

@@ -52,6 +52,9 @@ const useGameStore = create((set) => {
   };
 
   const actions = {
+    setSettings: (newSettings) => {
+      set({ settings: newSettings });
+    },
     adjustGridSize: () => {
       set((state) => ({
         grid: {

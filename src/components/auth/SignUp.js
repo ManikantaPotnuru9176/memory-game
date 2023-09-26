@@ -53,7 +53,7 @@ const SignUp = () => {
 
   const createUserInHasura = async (id, email) => {
     const admin_secret = process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET;
-    const url = process.env.NEXT_PUBLIC_HASURA_URL;
+    const url = process.env.NEXT_PUBLIC_HASURA_API_URL;
     const query = `
     mutation ($userId: String!, $userEmail: String!) {
       insert_users(
@@ -85,9 +85,9 @@ const SignUp = () => {
         }
       );
 
-      console.log("Response:", response.data);
+      // console.log("Response:", response.data);
     } catch (error) {
-      console.error("Error creating user in Hasura:", error);
+      console.error("Error:", error.message);
     }
   };
 

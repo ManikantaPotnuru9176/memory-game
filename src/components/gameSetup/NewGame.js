@@ -8,13 +8,10 @@ import useAuthStore from "@/store/authStore";
 import toast, { Toaster } from "react-hot-toast";
 import { signOut } from "firebase/auth";
 import { auth } from "../auth/config/firebaseConfig";
+import axios from "axios";
 
 const NewGame = () => {
   const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    setShow(true);
-  }, []);
 
   const settings = useGameStore((store) => store.settings);
   const changeOptions = useGameStore((store) => store.changeOptions);
@@ -22,18 +19,83 @@ const NewGame = () => {
 
   const user = useAuthStore((store) => store.user);
   const setUser = useAuthStore((store) => store.setUser);
+  const rememberSettings = useAuthStore((store) => store.rememberSettings);
+  const setRememberSettings = useAuthStore(
+    (store) => store.setRememberSettings
+  );
 
   const router = useRouter();
 
   useEffect(() => {
+    setShow(true);
     const user = JSON.parse(localStorage.getItem("user"));
     setUser(user);
+    const settings = JSON.parse(localStorage.getItem("rememberSettings"));
+    if (settings) setRememberSettings(settings);
   }, []);
 
   const options = {
     themeOptions: ["Numbers", "Icons"],
     playerOptions: [1, 2, 3, 4],
     gridSizeOptions: ["4x4", "6x6"],
+  };
+
+  const handleRememberSettings = () => {
+    setRememberSettings(!rememberSettings);
+    localStorage.setItem("rememberSettings", JSON.stringify(!rememberSettings));
+  };
+
+  const handleStartGame = (e) => {
+    e.preventDefault();
+    shuffleGridValues();
+    if (rememberSettings) saveSettingsInHasura();
+    user ? router.push("/game/game") : router.push("/auth/signin");
+  };
+
+  const saveSettingsInHasura = async () => {
+    const admin_secret = process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET;
+    const url = process.env.NEXT_PUBLIC_HASURA_API_URL;
+    const query = `
+    mutation insert_game_settings_one($userId: String!, $selectedTheme: String!, $noOfPlayers: Int!, $gridSize: String!) {
+    insert_game_settings_one(
+        object: {user_id: $userId, selected_theme: $selectedTheme, no_of_players: $noOfPlayers, grid_size: $gridSize}
+        on_conflict: {constraint: game_settings_pkey, update_columns: [grid_size, no_of_players, selected_theme]}
+    ) {
+        grid_size
+        no_of_players
+        selected_theme
+        user_id
+    }
+}
+
+  `;
+
+    const variables = {
+      userId: user,
+      selectedTheme: settings.selectedTheme,
+      noOfPlayers: settings.selectedPlayers,
+      gridSize: settings.selectedGridSize,
+    };
+
+    try {
+      const response = await axios.post(
+        url,
+        {
+          query,
+          variables,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-hasura-admin-secret": admin_secret,
+          },
+        }
+      );
+
+      // console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
   };
 
   const handleSignOut = async () => {
@@ -116,16 +178,27 @@ const NewGame = () => {
               selectedValue={settings.selectedGridSize}
               onChange={(size) => changeOptions("selectedGridSize", size)}
             />
+            <div className="flex items-start">
+              <div className="flex items-center h-5">
+                <input
+                  id="remember"
+                  aria-describedby="remember"
+                  type="checkbox"
+                  className="w-4 h-4 rounded accent-yellow-500 cursor-pointer"
+                  checked={rememberSettings}
+                  onChange={handleRememberSettings}
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label htmlFor="remember" className="text-[#152836]">
+                  Remember my game settings.
+                </label>
+              </div>
+            </div>
             <div className="pt-2">
               <button
                 className="w-full text-4.125 md:text-3xl font-extrabold bg-[#fca417] hover:bg-[#fcba4f] focus-visible:bg-yellow-900 text-white leading-[2.7] md:leading-[2.187] rounded-full"
-                onClick={(e) => {
-                  e.preventDefault();
-                  shuffleGridValues();
-                  user
-                    ? router.push("/game/game")
-                    : router.push("/auth/signin");
-                }}
+                onClick={(e) => handleStartGame(e)}
               >
                 Start Game
               </button>

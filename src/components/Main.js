@@ -8,6 +8,9 @@ import GameEnd from "./gameEnd/GameEnd";
 import useAuthStore from "@/store/authStore";
 import { useRouter } from "next/router";
 
+import { getGameSettings } from "@/helpers/helpers";
+import Loading from "./Loading";
+
 const Main = () => {
   const [show, setShow] = useState(false);
 
@@ -15,6 +18,7 @@ const Main = () => {
   const adjustGridSize = useGameStore((store) => store.adjustGridSize);
   const adjustPlayers = useGameStore((store) => store.adjustPlayers);
   const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
+  const setSettings = useGameStore((store) => store.setSettings);
 
   const setUser = useAuthStore((store) => store.setUser);
 
@@ -22,6 +26,7 @@ const Main = () => {
 
   useEffect(() => {
     adjustGridSize();
+    shuffleGridValues();
   }, [settings.selectedGridSize]);
 
   useEffect(() => {
@@ -29,12 +34,20 @@ const Main = () => {
   }, [settings.selectedPlayers]);
 
   useEffect(() => {
-    setShow(true);
     const user = JSON.parse(localStorage.getItem("user"));
     setUser(user);
     if (!user) router.push("/auth/signin");
     shuffleGridValues();
+    const rememberSettings = JSON.parse(
+      localStorage.getItem("rememberSettings")
+    );
+    
+    if (user && rememberSettings)
+      getGameSettings(user, setSettings).then(() => setShow(true));
+    else setShow(true);
   }, []);
+
+  if (!show) return <Loading />;
 
   return (
     <div

@@ -7,16 +7,14 @@ import {
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./config/firebaseConfig";
 import { useRouter } from "next/router";
 import useAuthStore from "@/store/authStore";
 import toast, { Toaster } from "react-hot-toast";
-import useGameStore from "@/store/gameStore";
 
 const SignIn = () => {
   const [show, setShow] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setShow(true);

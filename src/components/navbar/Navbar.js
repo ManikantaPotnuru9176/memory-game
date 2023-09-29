@@ -46,9 +46,9 @@ const Navbar = () => {
   };
 
   const handleNewGame = () => {
+    router.push("/game/newgame");
     setPausePlay("Start Game");
     restartGame();
-    router.push("/game/newgame");
   };
 
   const toggleMenu = () => {

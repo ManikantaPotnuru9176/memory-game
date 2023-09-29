@@ -8,7 +8,11 @@ import useAuthStore from "@/store/authStore";
 import toast, { Toaster } from "react-hot-toast";
 import { signOut } from "firebase/auth";
 import { auth } from "../auth/config/firebaseConfig";
-import axios from "axios";
+
+import { getGameSettings, saveSettingsInHasura } from "@/helpers/helpers";
+import Loading from "../Loading";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const NewGame = () => {
   const [show, setShow] = useState(false);
@@ -16,6 +20,7 @@ const NewGame = () => {
   const settings = useGameStore((store) => store.settings);
   const changeOptions = useGameStore((store) => store.changeOptions);
   const shuffleGridValues = useGameStore((store) => store.shuffleGridValues);
+  const setSettings = useGameStore((store) => store.setSettings);
 
   const user = useAuthStore((store) => store.user);
   const setUser = useAuthStore((store) => store.setUser);
@@ -23,15 +28,21 @@ const NewGame = () => {
   const setRememberSettings = useAuthStore(
     (store) => store.setRememberSettings
   );
+  const buttonLoading = useAuthStore((store) => store.buttonLoading);
+  const setButtonLoading = useAuthStore((store) => store.setButtonLoading);
 
   const router = useRouter();
 
   useEffect(() => {
-    setShow(true);
     const user = JSON.parse(localStorage.getItem("user"));
     setUser(user);
-    const settings = JSON.parse(localStorage.getItem("rememberSettings"));
-    if (settings) setRememberSettings(settings);
+    const rememberSettings = JSON.parse(
+      localStorage.getItem("rememberSettings")
+    );
+    if (user && rememberSettings) {
+      setRememberSettings(settings);
+      getGameSettings(user, setSettings).then(() => setShow(true));
+    } else setShow(true);
   }, []);
 
   const options = {
@@ -47,55 +58,13 @@ const NewGame = () => {
 
   const handleStartGame = (e) => {
     e.preventDefault();
+    setButtonLoading(true);
     shuffleGridValues();
-    if (rememberSettings) saveSettingsInHasura();
-    user ? router.push("/game/game") : router.push("/auth/signin");
-  };
-
-  const saveSettingsInHasura = async () => {
-    const admin_secret = process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET;
-    const url = process.env.NEXT_PUBLIC_HASURA_API_URL;
-    const query = `
-    mutation insert_game_settings_one($userId: String!, $selectedTheme: String!, $noOfPlayers: Int!, $gridSize: String!) {
-    insert_game_settings_one(
-        object: {user_id: $userId, selected_theme: $selectedTheme, no_of_players: $noOfPlayers, grid_size: $gridSize}
-        on_conflict: {constraint: game_settings_pkey, update_columns: [grid_size, no_of_players, selected_theme]}
-    ) {
-        grid_size
-        no_of_players
-        selected_theme
-        user_id
-    }
-}
-
-  `;
-
-    const variables = {
-      userId: user,
-      selectedTheme: settings.selectedTheme,
-      noOfPlayers: settings.selectedPlayers,
-      gridSize: settings.selectedGridSize,
-    };
-
-    try {
-      const response = await axios.post(
-        url,
-        {
-          query,
-          variables,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-hasura-admin-secret": admin_secret,
-          },
-        }
-      );
-
-      // console.log("Response:", response.data);
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
+    if (rememberSettings)
+      saveSettingsInHasura(user, settings).then(() => {
+        user ? router.push("/game/game") : router.push("/auth/signin");
+        setButtonLoading(false);
+      });
   };
 
   const handleSignOut = async () => {
@@ -116,6 +85,8 @@ const NewGame = () => {
       console.log("Error: ", error.message);
     }
   };
+
+  if (!show) return <Loading />;
 
   return (
     <div
@@ -197,9 +168,15 @@ const NewGame = () => {
             </div>
             <div className="pt-2">
               <button
-                className="w-full text-4.125 md:text-3xl font-extrabold bg-[#fca417] hover:bg-[#fcba4f] focus-visible:bg-yellow-900 text-white leading-[2.7] md:leading-[2.187] rounded-full"
+                className="relative w-full text-4.125 md:text-3xl font-extrabold bg-[#fca417] hover:bg-[#fcba4f] focus-visible:bg-yellow-900 text-white leading-[2.7] md:leading-[2.187] rounded-full"
                 onClick={(e) => handleStartGame(e)}
               >
+                {buttonLoading && (
+                  <FontAwesomeIcon
+                    icon={faSpinner}
+                    className="animate-spin h-5 w-5 mb-1 left-2"
+                  />
+                )}
                 Start Game
               </button>
             </div>
